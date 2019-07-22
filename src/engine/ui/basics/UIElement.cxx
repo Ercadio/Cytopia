@@ -56,9 +56,9 @@ void UIElement::drawTextFrame() const
 {
   if (m_uiElementRect.w != 0 && m_uiElementRect.h != 0)
   {
-    drawSolidRect(m_uiElementRect, SDL_Color{150, 150, 150});
+    drawSolidRect(m_uiElementRect, SDL_Color{150, 150, 150, 255});
     drawSolidRect({m_uiElementRect.x - 2, m_uiElementRect.y - 2, m_uiElementRect.w + 1, m_uiElementRect.h + 1},
-                  SDL_Color{128, 128, 128});
+                  SDL_Color{128, 128, 128, 255});
   }
 }
 
@@ -103,20 +103,20 @@ void UIElement::drawButtonFrame(SDL_Rect rect, bool isHighlightable)
     bgColorBottomFrameShade = 84;
   }
 
-  drawSolidRect(rect, SDL_Color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade});
-  drawSolidRect(SDL_Rect{rect.x + 2, rect.y + 2, rect.w - 4, rect.h - 4}, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame});
+  drawSolidRect(rect, SDL_Color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade, 255});
+  drawSolidRect(SDL_Rect{rect.x + 2, rect.y + 2, rect.w - 4, rect.h - 4}, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame, 255});
   // background
-  drawSolidRect(SDL_Rect{rect.x + 4, rect.y + 4, rect.w - 8, rect.h - 8}, SDL_Color{bgColor, bgColor, bgColor});
+  drawSolidRect(SDL_Rect{rect.x + 4, rect.y + 4, rect.w - 8, rect.h - 8}, SDL_Color{bgColor, bgColor, bgColor, 255});
   // bottom frame
   drawSolidRect(SDL_Rect{rect.x + 4, (rect.y + rect.h) - 4, rect.w - 4, 4},
-                SDL_Color{bgColorBottomFrame, bgColorBottomFrame, bgColorBottomFrame});
+                SDL_Color{bgColorBottomFrame, bgColorBottomFrame, bgColorBottomFrame, 255});
   drawSolidRect(SDL_Rect{(rect.x + rect.w) - 4, rect.y + 4, 4, rect.h - 4},
-                SDL_Color{bgColorBottomFrame, bgColorBottomFrame, bgColorBottomFrame});
+                SDL_Color{bgColorBottomFrame, bgColorBottomFrame, bgColorBottomFrame, 255});
   // bottom frame shade
   drawSolidRect(SDL_Rect{rect.x + 2, (rect.y + rect.h) - 2, rect.w - 2, 2},
-                SDL_Color{bgColorBottomFrameShade, bgColorBottomFrameShade, bgColorBottomFrameShade});
+                SDL_Color{bgColorBottomFrameShade, bgColorBottomFrameShade, bgColorBottomFrameShade, 255});
   drawSolidRect(SDL_Rect{(rect.x + rect.w) - 2, rect.y + 2, 2, rect.h - 2},
-                SDL_Color{bgColorBottomFrameShade, bgColorBottomFrameShade, bgColorBottomFrameShade});
+                SDL_Color{bgColorBottomFrameShade, bgColorBottomFrameShade, bgColorBottomFrameShade, 255});
 }
 
 void UIElement::drawFrame(SDL_Rect rect) const
@@ -125,15 +125,15 @@ void UIElement::drawFrame(SDL_Rect rect) const
   const Uint8 bgColorFrame = 150;
   const Uint8 bgColorFrameShade = 172;
 
-  drawSolidRect(rect, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame});
+  drawSolidRect(rect, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame, 255});
   drawSolidRect(SDL_Rect{rect.x + 2, rect.y + 2, rect.w - 4, rect.h - 4},
-                SDL_Color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade});
+                SDL_Color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade, 255});
   if (rect.h >= 8 && rect.w >= 4)
   {
-    drawSolidRect(SDL_Rect{rect.x + 4, rect.y + 4, rect.w - 8, rect.h - 8}, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame});
+    drawSolidRect(SDL_Rect{rect.x + 4, rect.y + 4, rect.w - 8, rect.h - 8}, SDL_Color{bgColorFrame, bgColorFrame, bgColorFrame, 255});
   }
   if (rect.h >= 12 && rect.w >= 6)
   {
-    drawSolidRect(SDL_Rect{rect.x + 6, rect.y + 6, rect.w - 12, rect.h - 12}, SDL_Color{bgColor, bgColor, bgColor});
+    drawSolidRect(SDL_Rect{rect.x + 6, rect.y + 6, rect.w - 12, rect.h - 12}, SDL_Color{bgColor, bgColor, bgColor, 255});
   }
 }

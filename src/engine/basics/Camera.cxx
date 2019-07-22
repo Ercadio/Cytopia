@@ -62,8 +62,8 @@ void Camera::centerScreenOnPoint(const Point &isoCoordinates)
     centerIsoCoordinates = isoCoordinates;
     const SDL_Point screenCoordinates = convertIsoToScreenCoordinates(isoCoordinates, true);
 
-    int x = static_cast<int>((screenCoordinates.x + (tileSize.x * zoomLevel) * 0.5) - Settings::instance().screenWidth * 0.5);
-    int y = static_cast<int>((screenCoordinates.y + (tileSize.y * zoomLevel) * 0.25) - Settings::instance().screenHeight * 0.5);
+    int x = static_cast<int>((screenCoordinates.x + (tileSize.x * zoomLevel) * 0.5) - Settings::instance().get<ScreenWidth>().get() * 0.5);
+    int y = static_cast<int>((screenCoordinates.y + (tileSize.y * zoomLevel) * 0.25) - Settings::instance().get<ScreenHeight>().get() * 0.5);
 
     x -= static_cast<int>((tileSize.x * zoomLevel) * 0.75);
     y -= static_cast<int>(tileSize.y * zoomLevel);
@@ -76,6 +76,6 @@ void Camera::centerScreenOnPoint(const Point &isoCoordinates)
 
 void Camera::centerScreenOnMapCenter()
 {
-  centerIsoCoordinates = {Settings::instance().mapSize / 2, Settings::instance().mapSize / 2, 0, 0};
+  centerIsoCoordinates = {Settings::instance().get<MapSize>().get() / 2, Settings::instance().get<MapSize>().get() / 2, 0, 0};
   centerScreenOnPoint(centerIsoCoordinates);
 }

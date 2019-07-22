@@ -56,8 +56,6 @@ protected:
    */
   inline void notifyObservers(DataArgs... args) noexcept
   {
-    ObsIterator it = m_Observers.before_begin();
-    ObsIterator old;
     bool mustCleanup = false;
     m_Observers.remove_if([&mustCleanup](ObserverWPtr<DataArgs...> ptr) {
       if (ptr.expired())
@@ -99,7 +97,7 @@ protected:
    * @param observer the observer to be notified
    * @param data the data to be sent to observer
    */
-  virtual inline bool mustNotify(ObserverWPtr<DataArgs...> observer, const DataArgs &... data) const noexcept { return true; }
+  virtual inline bool mustNotify(ObserverWPtr<DataArgs...>, const DataArgs &...) const noexcept { return true; }
 
 public:
   /**

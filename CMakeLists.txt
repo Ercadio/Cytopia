@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 # add the path to our custom find modules
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
-
 include(CMakeDependentOption)
 include(SourceFileUtils)
 include(FetchContent)
@@ -14,6 +13,7 @@ option(ENABLE_SDL2_MIXER "Enable SDL2 Mixer" ON)
 option(ENABLE_MICROPROFILE "Enable microprofile" OFF)
 option(ENABLE_ANGELSCRIPT "Enable AngelScript" ON)
 option(ENABLE_MOFILEREADER "Enable MofileReader" ON)
+
 
 if (NOT ENABLE_SDL2_MIXER)
     set(_CC_SDL2_MIXER "# ")
@@ -36,6 +36,13 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/conanfile.txt.in" "${CMAKE_CURRENT_S
 set(_include_directories "${CMAKE_CURRENT_SOURCE_DIR}/external/header_only")
 set(_compile_definitions "")
 set(_link_libraries "")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Werror -Wextra -Weffc++")
+#-Weffc++ -fdiagnostics-show-template-tree -Wnull-dereference \
+#-Wsuggest-final-types -Wsuggest-final-methods -Wsuggest-override -Wshadow -Wduplicated-branches -Winline -Wnoexcept
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 # create the cmake project
 project(

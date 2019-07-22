@@ -2,6 +2,7 @@
 #define MUSIC_HXX_
 
 #include <string>
+#include <memory>
 
 #include <SDL_mixer.h>
 
@@ -14,7 +15,7 @@ class Music
 public:
   Music() = default;
   Music(const std::string &fileName);
-  ~Music();
+  ~Music() = default;
 
   /** \brief Load File
     * Loads a music file of WAV, MOD, MIDI, OGG, MP3, FLAC.
@@ -52,7 +53,13 @@ public:
   void enableMusic(bool enabled);
 
 private:
-  Mix_Music *m_music = nullptr;
+
+  struct MixMusicDeleter
+  {
+    void operator()(Mix_Music*) noexcept;
+  };
+  using MixMusicPtr = std::unique_ptr<Mix_Music, MixMusicDeleter>;
+  MixMusicPtr m_music = MixMusicPtr();
 
   bool m_playMusic = true;
 };

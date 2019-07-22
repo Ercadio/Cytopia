@@ -112,7 +112,7 @@ struct StrongType
   
   WeakType& get() noexcept { return m_Data; }
 private:
-  WeakType m_Data;
+  WeakType m_Data = {};
 };
 
 #endif

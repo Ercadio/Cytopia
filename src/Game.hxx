@@ -82,7 +82,7 @@ private:
   {
 
     template<typename ArgumentType>
-    void operator()(ArgumentType&& event)
+    void operator()(ArgumentType&&)
     {
       static_assert(std::is_void_v<std::void_t<ArgumentType>>, "UIVisitor does not know how to handle this event. You must specialize the functor");
     }
@@ -101,7 +101,7 @@ private:
   struct GameVisitor
   {
     template<typename ArgumentType>
-    void operator()(ArgumentType&& event)
+    void operator()(ArgumentType&&)
     {
       static_assert(std::is_void_v<std::void_t<ArgumentType>>, "GameVisitor does not know how to handle this event. You must specialize the functor");
     }

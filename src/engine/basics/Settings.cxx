@@ -28,8 +28,7 @@ void Settings::readFile()
     LOG(LOG_ERROR) << "Error parsing JSON File " << SETTINGS_FILE_NAME;
   }
 
-  SettingsData data = _settingsJSONObject;
-  *this = data;
+  m_Data = _settingsJSONObject;
 
   // init the actual resolution with the desired resolution
   currentScreenWidth = screenWidth;
@@ -38,7 +37,7 @@ void Settings::readFile()
 
 void Settings::writeFile()
 {
-  const json settingsJsonObject = *this;
+  const json settingsJsonObject = m_Data;
 
   std::string settingsFileName = SDL_GetBasePath();
   settingsFileName.append(SETTINGS_FILE_NAME);

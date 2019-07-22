@@ -87,7 +87,7 @@ private:
 
   MonitorUPtr m_OnEvent = std::make_unique<Monitor>();
   MutexUPtr m_Semaphore = std::make_unique<Mutex>();
-  Deque<Event> m_Queue;
+  Deque<Event> m_Queue = {};
 };
 
 #endif

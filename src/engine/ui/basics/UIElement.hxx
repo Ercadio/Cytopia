@@ -30,13 +30,16 @@ protected:
     bool isToggleButton = false; // specifies if this is a toggle button
   };
 
-  ElementData elementData;
+  ElementData elementData = { };
 
 public:
   //Initializes variables
   UIElement() = default;
   explicit UIElement(const SDL_Rect &uiElementRect) : m_uiElementRect(uiElementRect){};
   virtual ~UIElement() = default;
+  UIElement(const UIElement&) = delete;
+  UIElement(UIElement&&) = delete;
+  UIElement& operator=(const UIElement&) = delete;
 
   virtual void registerCallbackFunction(std::function<void()> const &){};
   virtual void registerCallbackFunction(std::function<void(UIElement *sender)> const &){};

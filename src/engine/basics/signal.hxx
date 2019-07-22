@@ -31,7 +31,7 @@ template <typename Result> struct CollectorLast
   CollectorResult result() { return last_; }
 
 private:
-  Result last_;
+  Result last_ = {};
 };
 
 /// CollectorDefault implements the default signal handler collection behaviour.
@@ -81,7 +81,7 @@ private:
 
   using CallbackSlot = std::shared_ptr<CbFunction>;
   using CallbackList = std::list<CallbackSlot>;
-  CallbackList callback_list_;
+  CallbackList callback_list_ = {};
 
   size_t add_cb(const CbFunction &cb)
   {

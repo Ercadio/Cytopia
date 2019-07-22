@@ -1,6 +1,7 @@
 #ifndef SOUNDEFFECT_HXX_
 #define SOUNDEFFECT_HXX_
 
+#include <memory>
 #include <string>
 
 #include <SDL.h>
@@ -15,7 +16,7 @@ class SoundEffect
 public:
   SoundEffect(const std::string &filename);
   SoundEffect() = default;
-  ~SoundEffect();
+  ~SoundEffect() = default;
 
   /** \brief Load File
     * Loads a sound effect file.
@@ -52,9 +53,16 @@ public:
   void enableSoundEffects(bool enabled);
 
 private:
-  Mix_Chunk *m_soundEffect = nullptr;
 
+  struct MixChunkDeleter
+  {
+    void operator()(Mix_Chunk* chunkPtr) noexcept;
+  };
+  using MixChunkPtr = std::unique_ptr<Mix_Chunk, struct MixChunkDeleter>;
+  
+  MixChunkPtr m_soundEffect = MixChunkPtr();
   bool m_playSoundEffect;
 };
+
 
 #endif

@@ -5,14 +5,6 @@
 
 Music::Music(const std::string &fileName) : m_playMusic(Settings::instance().playMusic) { loadFile(fileName); }
 
-Music::~Music()
-{
-  if (m_music)
-  {
-    Mix_FreeMusic(m_music);
-  }
-}
-
 void Music::loadFile(const std::string &filename)
 {
   m_music = Mix_LoadMUS(filename.c_str());
@@ -82,3 +74,5 @@ bool Music::isPlaying() const
 }
 
 void Music::enableMusic(bool enabled) { m_playMusic = enabled; }
+
+void Music::MusicPtrDeleter::operator()(Mix_Music* musicPtr) noexcept { Mix_FreeMusic(musicPtr); }

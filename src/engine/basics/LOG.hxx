@@ -70,7 +70,7 @@ public:
 private:
   bool active = false;
   logType _logType = LOG_INFO;
-  std::ostringstream logMessage;
+  std::ostringstream logMessage = { };
 
   /** @brief Gets formatted TimeStamp
   * Gets formatted TimeStamp

@@ -8,17 +8,9 @@ SoundEffect::SoundEffect(const std::string &filename) : m_playSoundEffect(Settin
   loadFile(filename);
 }
 
-SoundEffect::~SoundEffect()
-{
-  if (m_soundEffect)
-  {
-    Mix_FreeChunk(m_soundEffect);
-  }
-}
-
 void SoundEffect::loadFile(const std::string &filename)
 {
-  m_soundEffect = Mix_LoadWAV(filename.c_str());
+  m_soundEffect = { Mix_LoadWAV(filename.c_str()) };
   if (!m_soundEffect)
   {
     LOG(LOG_ERROR) << "Failed to load audio file " << filename << "\n" << Mix_GetError();
@@ -72,3 +64,5 @@ bool SoundEffect::isPlaying() const
 }
 
 void SoundEffect::enableSoundEffects(bool enabled) { m_playSoundEffect = enabled; }
+
+void SoundEffect::MixChunkDeleter::operator()(Mix_Chunk* chunkPtr) noexcept { Mix_FreeChunk(chunkPtr); }

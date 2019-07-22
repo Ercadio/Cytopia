@@ -5,25 +5,26 @@
 
 struct Point
 {
+  Point() = default;
   /**
    * The x coordinate.
    */
-  int x;
+  int x = 0;
 
   /**
    * The y coordinate.
    */
-  int y;
+  int y = 0;
 
   /**
    * The z coordinate.
    */
-  int z;
+  int z = 0;
 
   /**
    * The height level.
    */
-  int height;
+  int height = 0;
 };
 
 #endif

@@ -24,7 +24,7 @@ void Text::setText(const std::string &text)
 #else
   elementData.text = text;
 #endif
-  createTextTexture(elementData.text, SDL_Color{255, 255, 255});
+  createTextTexture(elementData.text, SDL_Color{255, 255, 255, 255});
 }
 
 void Text::setFontSize(int fontSize)

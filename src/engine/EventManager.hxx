@@ -13,6 +13,9 @@ class EventManager : public Singleton<EventManager>
 public:
   EventManager() = default;
   ~EventManager() = default;
+  EventManager(EventManager&&) = delete;
+  EventManager(const EventManager&) = delete;
+  EventManager& operator=(const EventManager&) = delete;
 
   void checkEvents(SDL_Event &event, Engine &engine);
 
@@ -29,8 +32,8 @@ private:
   Point pinchCenterCoords = {0, 0, 0, 0};
   Point m_clickDownCoords = {0, 0, 0, 0};
   Point m_highlitNode = {0, 0, 0, 0};
-  std::vector<Point> m_highlightedNodes = {};
-  std::vector<Timer *> timers;
+  std::vector<Point> m_highlightedNodes = { };
+  std::vector<Timer *> timers = { };
 };
 
 #endif

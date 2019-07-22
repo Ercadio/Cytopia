@@ -66,7 +66,7 @@ bool Slider::onMouseButtonDown(const SDL_Event &event)
   return false;
 }
 
-bool Slider::onMouseButtonUp(const SDL_Event &event)
+bool Slider::onMouseButtonUp(const SDL_Event &)
 {
   dragMode = false;
   return false;
@@ -85,4 +85,4 @@ void Slider::onMouseMove(const SDL_Event &event)
   }
 }
 
-bool Slider::isMouseOver(int x, int y) { return true; }
+bool Slider::isMouseOver(int, int) { return true; }

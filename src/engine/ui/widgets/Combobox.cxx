@@ -29,7 +29,7 @@ void ComboBox::draw()
 
   // draw the arrow
   SDL_Rect arrowRect;
-  const SDL_Color color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade};
+  const SDL_Color color{bgColorFrameShade, bgColorFrameShade, bgColorFrameShade, 255};
 
   arrowRect.w = 18;
   arrowRect.h = 2;

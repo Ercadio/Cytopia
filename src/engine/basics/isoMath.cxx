@@ -57,19 +57,19 @@ Point convertScreenToIsoCoordinates(const SDL_Point &screenCoordinates)
     {
       foundCoordinates.x = 0;
     }
-    else if (foundCoordinates.x >= Settings::instance().mapSize)
+    else if (foundCoordinates.x >= Settings::instance().get<MapSize>().get())
     {
       // map (vector) size is 128, but coordinates ranges from 0 - 127
-      foundCoordinates.x = Settings::instance().mapSize - 1;
+      foundCoordinates.x = Settings::instance().get<MapSize>().get() - 1;
     }
     if (foundCoordinates.y < 0)
     {
       foundCoordinates.y = 0;
     }
-    else if (foundCoordinates.y >= Settings::instance().mapSize)
+    else if (foundCoordinates.y >= Settings::instance().get<MapSize>().get())
     {
       // map (vector) size is 128, but coordinates range from 0 - 127
-      foundCoordinates.y = Settings::instance().mapSize - 1;
+      foundCoordinates.y = Settings::instance().get<MapSize>().get() - 1;
     }
   }
   return foundCoordinates;
@@ -77,8 +77,9 @@ Point convertScreenToIsoCoordinates(const SDL_Point &screenCoordinates)
 
 bool isPointWithinMapBoundaries(const Point &isoCoordinates)
 {
-  return (isoCoordinates.x >= 0 && isoCoordinates.x < Settings::instance().mapSize) &&
-         (isoCoordinates.y >= 0 && isoCoordinates.y < Settings::instance().mapSize);
+  MapSize mapSize = Settings::instance().get<MapSize>();
+  return (isoCoordinates.x >= 0 && isoCoordinates.x < mapSize.get()) &&
+         (isoCoordinates.y >= 0 && isoCoordinates.y < mapSize.get());
 }
 
 std::vector<Point> createBresenhamLine(const Point &isoCoordinatesStart, const Point &isoCoordinatesEnd)

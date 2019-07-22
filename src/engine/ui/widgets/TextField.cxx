@@ -17,7 +17,7 @@ void TextField::draw()
   {
     if (hoveredID != -1)
     {
-      drawSolidRect(m_highlightingRect, SDL_Color({150, 150, 150}));
+      drawSolidRect(m_highlightingRect, SDL_Color({150, 150, 150, 255}));
     }
     for (const auto &text : m_textElements)
     {

@@ -13,7 +13,7 @@ void Checkbox::draw()
   if (getButtonState() == BUTTONSTATE_CLICKED)
   {
     drawSolidRect(SDL_Rect{(m_uiElementRect.x + 7), m_uiElementRect.y + 7, m_uiElementRect.w - 13, m_uiElementRect.h - 13},
-                  SDL_Color{84, 84, 84});
+                  SDL_Color{84, 84, 84, 255});
   }
 }
 

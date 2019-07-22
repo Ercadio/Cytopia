@@ -151,19 +151,19 @@ private:
   ~UIManager() = default;
 
   // this container holds all UiElements and is the owner.
-  std::vector<std::unique_ptr<UIElement>> m_uiElements;
+  std::vector<std::unique_ptr<UIElement>> m_uiElements = { };
 
   // stores Buttongroups and UiElements that are not in a group
-  std::vector<UIElement *> m_uiElementsForEventHandling;
+  std::vector<UIElement *> m_uiElementsForEventHandling = { };
 
   // map holding all ui elements, accessible via the group ID
-  std::unordered_map<std::string, std::vector<UIElement *>> m_uiGroups;
+  std::unordered_map<std::string, std::vector<UIElement *>> m_uiGroups = { };
 
   // map holding layput groups, accessible via the layoutgroup ID
-  std::unordered_map<std::string, LayoutGroup> m_layoutGroups;
+  std::unordered_map<std::string, LayoutGroup> m_layoutGroups = { };
 
   // Holding all buttongroups
-  std::unordered_map<std::string, ButtonGroup *> m_buttonGroups;
+  std::unordered_map<std::string, ButtonGroup *> m_buttonGroups = { };
 
   std::unique_ptr<Tooltip> m_tooltip = std::make_unique<Tooltip>();
 

@@ -95,7 +95,7 @@ public:
   void checkTimeout();
 
 private:
-  Signal::Signal<void()> m_timeOutSignal;
+  Signal::Signal<void()> m_timeOutSignal = { };
 
   bool m_loopTimer = false;
   bool m_timeOut = false;
