@@ -1,5 +1,6 @@
 #ifndef AUDIOMIXER_HXX_
 #define AUDIOMIXER_HXX_
+#ifdef ENABLE_AUDIO
 
 #include <array>
 #include <unordered_map>
@@ -164,5 +165,5 @@ private:
   friend class Game;
 
 };
-
-#endif
+#endif // ENABLE_AUDIO
+#endif // AUDIOMIXER_HXX_

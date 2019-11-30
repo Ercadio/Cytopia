@@ -1,5 +1,6 @@
 #ifndef SOUNDTRACK_HXX_
 #define SOUNDTRACK_HXX_
+#ifdef ENABLE_AUDIO
 
 #include <memory>
 #include <SDL_mixer.h>
@@ -63,4 +64,6 @@ struct Soundtrack
 
 using SoundtrackUPtr = std::unique_ptr<Soundtrack>;
 
-#endif
+#endif // ENABLE_AUDIO
+
+#endif // SOUNDTRACK_HXX_
