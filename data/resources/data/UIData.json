@@ -1,4 +1,7 @@
 {
+  "Button_Concrete": {
+    "Texture_Default": "resources/images/ui/buttons/concrete_button.png"
+  },
   "Button_NoIcon": {
     "Texture_Default": "resources/images/ui/buttons/no_icon.png"
   },
