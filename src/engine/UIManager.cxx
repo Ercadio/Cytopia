@@ -442,6 +442,10 @@ void UIManager::setCallbackFunctions()
     {
       uiElement->registerCallbackFunction(Signal::slot(this, &UIManager::changeResolution));
     }
+    else if (uiElement->getUiElementData().actionID == "SelectResidentialLow")
+    {
+      uiElement->registerCallbackFunction([] { LOG(LOG_INFO) << "CLIKED!"; });
+    }
   }
 }
 
