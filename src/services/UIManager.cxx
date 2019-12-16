@@ -8,6 +8,7 @@
 #include "basics/utils.hxx"
 #include "LOG.hxx"
 #include "Exception.hxx"
+#include "../model/MapEditor.hxx"
 
 #include "json.hxx"
 #include "betterEnums.hxx"
@@ -23,6 +24,11 @@ using json = nlohmann::json;
 BETTER_ENUM(ElementType, int, ImageButton, TextButton, Text, Frame, Checkbox, ComboBox, Slider)
 BETTER_ENUM(Action, int, RaiseTerrain, LowerTerrain, QuitGame, Demolish, ChangeTileType, ToggleVisibilityOfGroup, NewGame,
             SaveGame, LoadGame, SaveSettings, ChangeResolution)
+
+UIManager::UIManager(GameService::ServiceTuple & context, GlobalModel & globalModel) : 
+  GameService(context),
+  m_GlobalModel(globalModel)
+{ }
 
 void UIManager::init()
 {
@@ -204,7 +210,7 @@ void UIManager::init()
           {
             if (m_buttonGroups.find("buttonGroupID") == m_buttonGroups.end())
             {
-              m_buttonGroups[buttonGroupID] = new ButtonGroup();
+              m_buttonGroups[buttonGroupID] = new ButtonGroup(*this);
             }
 
             m_buttonGroups[buttonGroupID]->addToGroup(dynamic_cast<Button *>(uiElement.get()));
@@ -254,7 +260,7 @@ void UIManager::init()
 
   setBuildMenuLayout();
 
-  Layout::arrangeElements();
+  Layout(*this).arrangeElements();
 }
 
 void UIManager::setFPSCounterText(const std::string &fps) const { m_fpsCounter->setText(fps); }
@@ -340,13 +346,10 @@ void UIManager::setCallbackFunctions()
 
         if (button && button->getUiElementData().isToggleButton)
         {
-          terrainEditMode = button->checkState() ? TerrainEdit::RAISE : TerrainEdit::NONE;
           highlightSelection = button->checkState();
           return;
         }
 
-        terrainEditMode = (terrainEditMode == TerrainEdit::RAISE) ? TerrainEdit::NONE : TerrainEdit::RAISE;
-        highlightSelection = terrainEditMode != TerrainEdit::NONE;
       });
     }
     else if (uiElement->getUiElementData().actionID == "LowerTerrain")
@@ -356,13 +359,10 @@ void UIManager::setCallbackFunctions()
 
         if (button && button->getUiElementData().isToggleButton)
         {
-          button->checkState() ? terrainEditMode = TerrainEdit::LOWER : terrainEditMode = TerrainEdit::NONE;
           button->checkState() ? highlightSelection = true : highlightSelection = false;
           return;
         }
 
-        terrainEditMode == TerrainEdit::LOWER ? terrainEditMode = TerrainEdit::NONE : terrainEditMode = TerrainEdit::LOWER;
-        terrainEditMode == TerrainEdit::NONE ? highlightSelection = true : highlightSelection = false;
       });
     }
     else if (uiElement->getUiElementData().actionID == "QuitGame")
@@ -444,7 +444,12 @@ void UIManager::setCallbackFunctions()
     }
     else if (uiElement->getUiElementData().actionID == "SelectResidentialLow")
     {
-      uiElement->registerCallbackFunction([] { LOG(LOG_INFO) << "CLIKED!"; });
+      uiElement->registerCallbackFunction([this]{
+          auto& mapEditor = std::get<MapEditor>(m_GlobalModel);
+          mapEditor.setEditMode(TerrainEditMode::BuildRectangle);
+          mapEditor.setHighlightColor(0x07f55442);
+          mapEditor.setTileType("ResidentialLow");
+      });
     }
   }
 }
@@ -493,7 +498,7 @@ void UIManager::createBuildMenu()
   // Create ButtonGroup "_BuildMenu_" for the parent elements
   if (m_buttonGroups.find("_BuildMenu_") == m_buttonGroups.end())
   {
-    m_buttonGroups["_BuildMenu_"] = new ButtonGroup;
+    m_buttonGroups["_BuildMenu_"] = new ButtonGroup(*this);
   }
 
   // create buttonGroups for all main-buttons in BuildMenu (without the _sub prefix)
@@ -505,7 +510,7 @@ void UIManager::createBuildMenu()
     if (!parentGroupName.empty() && parentGroupName.find(subMenuSuffix) == std::string::npos &&
         m_buttonGroups.find(parentGroupName) == m_buttonGroups.end())
     {
-      m_buttonGroups[parentGroupName] = new ButtonGroup;
+      m_buttonGroups[parentGroupName] = new ButtonGroup(*this);
     }
   }
 
@@ -531,10 +536,10 @@ void UIManager::createBuildMenu()
       std::string newCategory = "Debug_" + category;
       if (m_buttonGroups.find("Debug_" + category) == m_buttonGroups.end())
       {
-        m_buttonGroups["Debug_" + category] = new ButtonGroup;
+        m_buttonGroups["Debug_" + category] = new ButtonGroup(*this);
         if (m_buttonGroups.find("Debug_sub") == m_buttonGroups.end())
         {
-          m_buttonGroups["Debug_sub"] = new ButtonGroup;
+          m_buttonGroups["Debug_sub"] = new ButtonGroup(*this);
         }
         Button *button = new Button({0, 0, bWid, bHei});
 
@@ -791,7 +796,7 @@ void UIManager::setBuildMenuPosition(UIElement *sender)
     Settings::instance().buildMenuPosition = comboBox->activeText;
     buildMenuLayout = static_cast<BUILDMENU_LAYOUT>(comboBox->getActiveID());
     setBuildMenuLayout();
-    Layout::arrangeElements();
+    Layout(*this).arrangeElements();
   }
   else
     throw UIError(TRACE_INFO "Only a combobox can have setBuildMenuPosition() as callback function");
@@ -811,7 +816,7 @@ void UIManager::changeResolution(UIElement *sender)
   // TODO: Save settings
   ComboBox *combobox = dynamic_cast<ComboBox *>(sender);
   WindowManager::instance().setScreenResolution(combobox->getActiveID());
-  Layout::arrangeElements();
+  Layout(*this).arrangeElements();
 }
 
 void UIManager::changeFullScreenMode(UIElement *sender)
@@ -819,5 +824,5 @@ void UIManager::changeFullScreenMode(UIElement *sender)
   // TODO: Save settings
   ComboBox *combobox = dynamic_cast<ComboBox *>(sender);
   WindowManager::instance().setFullScreenMode(static_cast<FULLSCREEN_MODE>(combobox->getActiveID()));
-  Layout::arrangeElements();
+  Layout(*this).arrangeElements();
 }

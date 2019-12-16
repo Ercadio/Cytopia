@@ -28,37 +28,34 @@ struct LayoutData
 class Layout
 {
 public:
+
   /**
- * @brief Arrange the layout elements
- *
- */
-  static void arrangeElements();
+   * @brief Arrange the layout elements
+   */
+  void arrangeElements();
+
+  /**
+   * @brief Construct a new Menu Group Build object
+   */
+  Layout(class UIManager &);
 
 private:
-  /**
- * @brief Construct a new Menu Group Build object
- *
- */
-  Layout() = default;
-  /**
- * @brief Destroy the Layout object
- * 
- */
-  ~Layout() = default;
 
   /**
-* @brief Arrange Elements that are aligned to a parent
-* This is a seperate function, so it can recurse if a parent element has a parent, so we can be sure that everything is initialized properly. 
-* @param groupLayout LayoutData from the group that should be layouted
-* @param groupElements Elenents of the group that should be layouted
-*/
-  static void arrangeChildElements(LayoutData &groupLayout, std::vector<UIElement *> groupElements);
+   * @brief Arrange Elements that are aligned to a parent
+   * This is a seperate function, so it can recurse if a parent element has a parent, so we can be sure that everything is initialized properly. 
+   * @param groupLayout LayoutData from the group that should be layouted
+   * @param groupElements Elenents of the group that should be layouted
+   */
+  void arrangeChildElements(LayoutData &groupLayout, std::vector<UIElement *> groupElements);
 
   /**
-* @brief Calculates height and width of layout groups
-* 
-*/
-  static void calculateLayoutGroupDimensions();
+   * @brief Calculates height and width of layout groups
+   */
+  void calculateLayoutGroupDimensions();
+
+  class UIManager & m_UIManager;
+
 };
 
 #endif

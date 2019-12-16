@@ -11,13 +11,11 @@ Engine::~Engine() { delete map; }
 
 void Engine::increaseHeight(const Point &isoCoordinates) const
 {
-  terrainEditMode = TerrainEdit::RAISE;
   map->increaseHeight(isoCoordinates);
 }
 
 void Engine::decreaseHeight(const Point &isoCoordinates) const
 {
-  terrainEditMode = TerrainEdit::LOWER;
   map->decreaseHeight(isoCoordinates);
 }
 

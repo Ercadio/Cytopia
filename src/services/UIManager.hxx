@@ -15,7 +15,9 @@
 #include "ui/widgets/TextField.hxx"
 #include "ui/widgets/Tooltip.hxx"
 #include "ui/widgets/Slider.hxx"
-#include "../util/Singleton.hxx"
+
+#include "../GameService.hxx"
+#include "../GlobalModel.hxx"
 
 /**
  * @brief Struct that hold UiElements belonging to a layoutgroup and its corresponding LayoutData
@@ -39,10 +41,11 @@ enum class BUILDMENU_LAYOUT
  * @brief Draws the UI to the screen
  * Parses UiLayout.json file and instantiates UI widgets accordingly. Also takes care of layouting
  */
-class UIManager : public Singleton<UIManager>
+class UIManager : public GameService
 {
 public:
-  friend Singleton<UIManager>;
+
+  UIManager(GameService::ServiceTuple &, GlobalModel &);
 
   /**
    * @brief Parses the UiLayout.json files and creates UI Elements
@@ -145,10 +148,10 @@ public:
   void changeFullScreenMode(UIElement *sender);
 
 private:
-  BUILDMENU_LAYOUT buildMenuLayout = BUILDMENU_LAYOUT::BOTTOM;
+ 
+  GlobalModel m_GlobalModel;
 
-  UIManager() = default;
-  ~UIManager() = default;
+  BUILDMENU_LAYOUT buildMenuLayout = BUILDMENU_LAYOUT::BOTTOM;
 
   // this container holds all UiElements and is the owner.
   std::vector<std::unique_ptr<UIElement>> m_uiElements;
@@ -165,7 +168,7 @@ private:
   // Holding all buttongroups
   std::unordered_map<std::string, ButtonGroup *> m_buttonGroups;
 
-  std::unique_ptr<Tooltip> m_tooltip = std::make_unique<Tooltip>();
+  std::unique_ptr<Tooltip> m_tooltip = std::make_unique<Tooltip>(GetService<GameClock>());
 
   // Text element for the FPS Counter (debug menu)
   std::unique_ptr<Text> m_fpsCounter = std::make_unique<Text>();

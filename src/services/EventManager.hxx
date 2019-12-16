@@ -6,21 +6,22 @@
 
 #include "Engine.hxx"
 #include "UIManager.hxx"
-#include "../util/Singleton.hxx"
+#include "../GameService.hxx"
+#include "../GlobalModel.hxx"
 
-class EventManager : public Singleton<EventManager>
+/**
+ * @todo This class should eventually be removed. All the code handling events should be inside of Game::run
+ *       and the logic should be replaced by dispatching events that are handled by controllers
+ */
+class EventManager : public GameService
 {
 public:
-  EventManager() = default;
-  ~EventManager() = default;
+
+  EventManager(GameService::ServiceTuple &, GlobalModel &);
 
   void checkEvents(SDL_Event &event, Engine &engine);
 
-  void registerTimer(Timer *timer);
-
 private:
-  UIManager &m_uiManager = UIManager::instance();
-
   UIElement *m_lastHoveredElement = nullptr;
 
   bool m_panning = false;
@@ -30,7 +31,7 @@ private:
   Point m_clickDownCoords = {0, 0, 0, 0};
   Point m_highlitNode = {0, 0, 0, 0};
   std::vector<Point> m_highlightedNodes = {};
-  std::vector<Timer *> timers;
+  GlobalModel & m_GlobalModel;
 };
 
 #endif

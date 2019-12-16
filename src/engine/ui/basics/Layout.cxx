@@ -2,7 +2,9 @@
 
 #include "LOG.hxx"
 #include "../../basics/Settings.hxx"
-#include "../../UIManager.hxx"
+#include "../../services/UIManager.hxx"
+
+Layout::Layout(UIManager &uiManager) : m_UIManager(uiManager) { }
 
 void Layout::arrangeElements()
 {
@@ -11,7 +13,7 @@ void Layout::arrangeElements()
 
   calculateLayoutGroupDimensions();
 
-  for (auto &group : UIManager::instance().getAllLayoutGroups())
+  for (auto &group : m_UIManager.getAllLayoutGroups())
   {
     LayoutData &groupLayout = group.second.layout;
 
@@ -182,7 +184,7 @@ void Layout::arrangeElements()
   }
 
   // Take care of elements that are aligned to a parent
-  for (auto &group : UIManager::instance().getAllLayoutGroups())
+  for (auto &group : m_UIManager.getAllLayoutGroups())
   {
     LayoutData &groupLayout = group.second.layout;
 
@@ -218,7 +220,7 @@ void Layout::arrangeChildElements(LayoutData &groupLayout, std::vector<UIElement
     }
 
     // get parent element and check if it exists
-    UIElement *parentElement = UIManager::instance().getUiElementByID(groupLayout.layoutParentElementID);
+    UIElement *parentElement = m_UIManager.getUiElementByID(groupLayout.layoutParentElementID);
     if (!parentElement)
     {
       LOG(LOG_WARNING) << "Cannot align element " << element->getUiElementData().elementID
@@ -230,9 +232,9 @@ void Layout::arrangeChildElements(LayoutData &groupLayout, std::vector<UIElement
     if (parentElement->getUiElementData().parent)
     {
       std::string parentsLayoutGroup = parentElement->getUiElementData().layoutGroupName;
-      LayoutData lay = UIManager::instance().getAllLayoutGroups()[parentsLayoutGroup].layout;
+      LayoutData lay = m_UIManager.getAllLayoutGroups()[parentsLayoutGroup].layout;
 
-      std::vector<UIElement *> parentsUiElements = UIManager::instance().getAllLayoutGroups()[parentsLayoutGroup].uiElements;
+      std::vector<UIElement *> parentsUiElements = m_UIManager.getAllLayoutGroups()[parentsLayoutGroup].uiElements;
 
       arrangeChildElements(lay, parentsUiElements);
     }
@@ -290,7 +292,7 @@ void Layout::arrangeChildElements(LayoutData &groupLayout, std::vector<UIElement
 void Layout::calculateLayoutGroupDimensions()
 {
   // First loop gets total width / height for all layouted groups
-  for (auto &group : UIManager::instance().getAllLayoutGroups())
+  for (auto &group : m_UIManager.getAllLayoutGroups())
   {
     LayoutData &groupLayout = group.second.layout;
 

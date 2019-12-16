@@ -1,11 +1,7 @@
 #include "Tooltip.hxx"
+#include "../../services/GameClock.hxx"
 
-Tooltip::Tooltip()
-{
-  m_tooltipTimer.registerCallbackFunction(Signal::slot(this, &Tooltip::showTooltip));
-  m_tooltipTimer.setTimer(700);
-  setVisibility(false);
-}
+Tooltip::Tooltip(GameClock & gameClock) : m_GameClock(gameClock) { setVisibility(false); }
 
 void Tooltip::draw()
 {
@@ -19,8 +15,8 @@ void Tooltip::draw()
 void Tooltip::startTimer()
 {
   setVisibility(false);
-  m_tooltipTimer.start();
   m_active = true;
+  m_GameClock.createDefferedTask(2s, [this](){ showTooltip(); });
 }
 
 void Tooltip::showTooltip() { setVisibility(true); }
@@ -30,7 +26,6 @@ void Tooltip::reset()
   if (m_active)
   {
     setVisibility(false);
-    m_tooltipTimer.stop();
     m_active = false;
   }
 }

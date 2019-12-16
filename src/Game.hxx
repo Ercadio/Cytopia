@@ -9,12 +9,14 @@
 #include "util/MessageQueue.hxx"
 #include "util/Meta.hxx"
 #include "GameService.hxx"
+#include "GlobalModel.hxx"
 #ifdef USE_SDL2_MIXER
 #include "services/AudioMixer.hxx"
 #endif
 #include "services/Randomizer.hxx"
 #include "services/GameClock.hxx"
 #include "services/ResourceManager.hxx"
+#include "services/EventManager.hxx"
 #include "LOG.hxx"
 #include "Exception.hxx"
 
@@ -59,11 +61,17 @@ public:
   virtual void mainMenu();
 
 private:
+
+  /* Global Model */
+  GlobalModel m_GlobalModel;
+
   /* Game context */
   using GameContext = GameService::ServiceTuple;
   GameContext m_GameContext;
 	
   /* Services */
+  EventManager m_EventManager;
+  UIManager m_UIManager;
   GameClock m_GameClock;
   Randomizer m_Randomizer;
   ResourceManager m_ResourceManager;
@@ -72,7 +80,6 @@ private:
 #endif
   UILoopMQ m_UILoopMQ;
   GameLoopMQ m_GameLoopMQ;
-
 
   /* Threads */
   Thread m_UILoop;

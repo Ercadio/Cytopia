@@ -3,7 +3,6 @@
 
 #include "../basics/UIElement.hxx"
 #include "Text.hxx"
-#include "../../basics/Timer.hxx"
 
 /** Tooltip class
   * Tooltip is derived from Text, and adds some extensions to it. It is set to visible after 
@@ -14,7 +13,7 @@
 class Tooltip : public Text
 {
 public:
-  Tooltip();
+  Tooltip(class GameClock &);
   ~Tooltip() override = default;
 
   void draw() override;
@@ -35,10 +34,10 @@ public:
   void reset();
 
 private:
-  /// Timer that counts the time until the Tooltip should be displayed
-  Timer m_tooltipTimer;
   /// if the Tooltip is active or not
   bool m_active = false;
+  class GameClock & m_GameClock;
+
 };
 
 #endif

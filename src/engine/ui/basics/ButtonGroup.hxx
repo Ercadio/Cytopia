@@ -4,6 +4,8 @@
 #include "UIElement.hxx"
 #include "../widgets/Button.hxx"
 
+class UIManager;
+
 /**
  * @brief Class to group buttons and to make sure there's only one active toggle button in the group
  * When adding buttons to the group, only one item can be active at the same time. If another button is clicked while another one is active, the last one will be un-clicked (unchecked)
@@ -15,11 +17,7 @@ public:
   /**
    * @brief Construct a new Button Group object
    */
-  ButtonGroup() = default;
-  /**
-   * @brief Destroy the Button Group object
-   */
-  ~ButtonGroup() = default;
+  ButtonGroup(UIManager &);
 
   /**
    * @brief Add a (toggle-)Button object to the button group
@@ -65,6 +63,8 @@ private:
    * @param exceptThisButton Does not toggle this button. Usually the caller, if exclusive is enabled.
    */
   void uncheckAllButtons(Button *exceptThisButton = nullptr);
+
+  UIManager &m_UIManager;
 };
 
 #endif

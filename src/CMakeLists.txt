@@ -12,6 +12,8 @@ set(SOURCE_FILES
         util/Exception.{hxx,cxx}
         util/MessageQueue.hxx
         util/MessageQueue.inl.hxx
+        events/UIEvents.hxx
+        events/AudioEvents.hxx
         GameService.{hxx,cxx}
         GameService.inl.hxx
         services/Randomizer.{hxx,cxx}
@@ -20,12 +22,15 @@ set(SOURCE_FILES
         services/GameClock.inl.hxx
         services/ResourceManager.{hxx,cxx}
         services/ResourceManager.inl.hxx
+        services/EventManager.{hxx,cxx}
+        services/UIManager.{hxx,cxx}
+        model/MousePosition.{hxx,cxx}
+        model/MapEditor.{hxx,cxx}
         engine/basics/Camera.{hxx,cxx}
         engine/basics/isoMath.{hxx,cxx}
         engine/basics/mapEdit.{hxx,cxx}
         engine/basics/Settings.{hxx,cxx}
         engine/basics/signal.hxx
-        engine/basics/Timer.{hxx,cxx}
         engine/basics/utils.{hxx,cxx}
         engine/audio/Soundtrack.{hxx,cxx}
         engine/common/Constants.hxx
@@ -49,12 +54,10 @@ set(SOURCE_FILES
         engine/ui/widgets/Tooltip.{hxx,cxx}
         engine/ui/menuGroups/IMenuGroup.hxx
         engine/Engine.{hxx,cxx}
-        engine/EventManager.{hxx,cxx}
         engine/Map.{hxx,cxx}
         engine/Sprite.{hxx,cxx}
         engine/ResourcesManager.{hxx,cxx}
         engine/TileManager.{hxx,cxx}
-        engine/UIManager.{hxx,cxx}
         engine/WindowManager.{hxx,cxx}
         )
 

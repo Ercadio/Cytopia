@@ -1,7 +1,5 @@
 #include "Game.hxx"
 #include "engine/Engine.hxx"
-#include "engine/EventManager.hxx"
-#include "engine/UIManager.hxx"
 #include "engine/WindowManager.hxx"
 #include "engine/basics/Camera.hxx"
 #include "LOG.hxx"
@@ -26,10 +24,9 @@
 template void Game::LoopMain<GameLoopMQ, Game::GameVisitor>(Game::GameContext &, Game::GameVisitor);
 template void Game::LoopMain<UILoopMQ, Game::UIVisitor>(Game::GameContext &, Game::UIVisitor);
 
-Game::Game()
-    :
-      m_GameContext(&m_UILoopMQ, &m_GameLoopMQ, &m_AudioMixer, &m_Randomizer, &m_GameClock, &m_ResourceManager),
-      m_GameClock{m_GameContext}, m_Randomizer{m_GameContext}, m_ResourceManager{m_GameContext},
+Game::Game() :
+      m_GameContext(&m_UILoopMQ, &m_GameLoopMQ, &m_AudioMixer, &m_Randomizer, &m_GameClock, &m_ResourceManager, &m_EventManager, &m_UIManager),
+      m_UIManager{m_GameContext, m_GlobalModel}, m_EventManager{m_GameContext, m_GlobalModel}, m_GameClock{m_GameContext}, m_Randomizer{m_GameContext}, m_ResourceManager{m_GameContext},
 #ifdef USE_SDL2_MIXER
       m_AudioMixer{m_GameContext},
 #endif
@@ -231,7 +228,6 @@ void Game::mainMenu()
 
 void Game::run(bool SkipMenu)
 {
-  Timer benchmarkTimer;
   LOG(LOG_INFO) << VERSION;
 
   if (SkipMenu)
@@ -239,17 +235,16 @@ void Game::run(bool SkipMenu)
     Engine::instance().newGame();
   }
 
-  benchmarkTimer.start();
+  auto before = std::chrono::high_resolution_clock::now();
   Engine &engine = Engine::instance();
-
-  LOG(LOG_DEBUG) << "Map initialized in " << benchmarkTimer.getElapsedTime() << "ms";
+  auto diff = std::chrono::high_resolution_clock::now() - before;
+  LOG(LOG_DEBUG) << "Map initialized in " << std::chrono::duration_cast<std::chrono::milliseconds>(diff).count() << "ms";
+  
   Camera::centerScreenOnMapCenter();
 
   SDL_Event event;
-  EventManager &evManager = EventManager::instance();
 
-  UIManager &uiManager = UIManager::instance();
-  uiManager.init();
+  m_UIManager.init();
 
 #ifdef USE_ANGELSCRIPT
   ScriptEngine &scriptEngine = ScriptEngine::instance();
@@ -289,14 +284,14 @@ void Game::run(bool SkipMenu)
 #endif
     SDL_RenderClear(WindowManager::instance().getRenderer());
 
-    evManager.checkEvents(event, engine);
+    m_EventManager.checkEvents(event, engine);
 
     // render the tileMap
     if (engine.map != nullptr)
       engine.map->renderMap();
 
     // render the ui
-    uiManager.drawUI();
+    m_UIManager.drawUI();
 
     // reset renderer color back to black
     SDL_SetRenderDrawColor(WindowManager::instance().getRenderer(), 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -309,7 +304,7 @@ void Game::run(bool SkipMenu)
     if (fpsLastTime < SDL_GetTicks() - fpsIntervall * 1000)
     {
       fpsLastTime = SDL_GetTicks();
-      uiManager.setFPSCounterText(std::to_string(fpsFrames) + " FPS");
+      m_UIManager.setFPSCounterText(std::to_string(fpsFrames) + " FPS");
       fpsFrames = 0;
     }
 

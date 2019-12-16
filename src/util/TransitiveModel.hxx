@@ -55,7 +55,7 @@ public:
 
   static_assert(std::is_enum_v<TransitionType>, "TransitionType must be an enum type");
 
-  template <typename... Args> inline void subscribe(ObserverSPtr<Event> observer, Args... filters)
+  template <typename... Args> void subscribe(ObserverSPtr<Event> observer, Args... filters)
   {
     addObserver(observer);
     (m_Filters[observer].insert(filters), ...);
@@ -69,9 +69,7 @@ private:
   virtual inline bool mustNotify(ObserverWPtr<Event> observer, const Event &event) const noexcept final
   {
     if (observer.expired())
-    {
       return false;
-    }
     try
     {
       return m_Filters.at(observer).count(event.getType()) == 1;
@@ -87,12 +85,8 @@ private:
     /* We are responsible for removing the ObserverWPtrs */
     using Iterator = typename FilterType::iterator;
     for (Iterator it = m_Filters.begin(); it != m_Filters.end(); ++it)
-    {
       if (std::get<0>(*it).expired())
-      {
         m_Filters.erase(it);
-      }
-    }
   }
 };
 

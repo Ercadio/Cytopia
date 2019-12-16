@@ -1,6 +1,7 @@
 #include "ButtonGroup.hxx"
+#include "../../services/UIManager.hxx"
 
-#include "../../UIManager.hxx"
+ButtonGroup::ButtonGroup(UIManager & uiManager) : m_UIManager(uiManager) { }
 
 void ButtonGroup::addToGroup(Button *widget)
 {
@@ -50,10 +51,10 @@ void ButtonGroup::uncheckAllButtons(Button *exceptThisButton)
   for (const auto &it : m_buttonGroup)
   {
     // If the ButtonGroup has children, uncheck them too
-    if (UIManager::instance().getUiElementsOfGroup(it->getUiElementData().actionParameter) &&
+    if (m_UIManager.getUiElementsOfGroup(it->getUiElementData().actionParameter) &&
         it->getUiElementData().actionID == "ToggleVisibilityOfGroup")
     {
-      for (auto groupElement : *UIManager::instance().getUiElementsOfGroup(it->getUiElementData().actionParameter))
+      for (auto groupElement : *m_UIManager.getUiElementsOfGroup(it->getUiElementData().actionParameter))
       {
         Button *button = dynamic_cast<Button *>(groupElement);
         if (button)

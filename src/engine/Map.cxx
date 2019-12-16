@@ -142,19 +142,6 @@ void Map::updateNeighborsOfNode(const Point &isoCoordinates)
       if (raise)
       {
         increaseHeight(it->getCoordinates());
-        if (terrainEditMode == TerrainEdit::LOWER)
-        {
-          //decreaseHeight(it->getCoordinates());
-          NeighborMatrix loweredNodesNeighbors;
-          getNeighbors(it->getCoordinates(), loweredNodesNeighbors);
-          for (const auto &neighbor : loweredNodesNeighbors)
-          {
-            if (neighbor && neighbor->getCoordinates().height > tileHeight)
-            {
-              decreaseHeight(neighbor->getCoordinates());
-            }
-          }
-        }
       }
     }
     i++;
