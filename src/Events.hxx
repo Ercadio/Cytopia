@@ -6,8 +6,6 @@
 #include "betterEnums.hxx"
 #include "util/Meta.hxx"
 #include "util/TransitiveModel.hxx"
-#include "engine/audio/Soundtrack.hxx"
-#include "engine/audio/AudioConfig.hxx"
 
 using std::string;
 
@@ -24,10 +22,12 @@ using UIEvents = TypeList<
  */
 using GameEvents = TypeList<
   struct TerminateEvent,
+#ifdef USE_AUDIO
   /* All AudioEvents */
   struct AudioTriggerEvent, struct AudioTrigger3DEvent, struct AudioPlayEvent, struct AudioPlay3DEvent,
   struct AudioMusicVolumeChangeEvent, struct AudioSoundVolumeChangeEvent, struct AudioSetMutedEvent,
   struct AudioStopEvent, struct AudioPruneEvent,
+#endif // USE_AUDIO
   /* All MouseEvents */
   struct MousePositionEvent,
   struct ClickEvent,
@@ -35,8 +35,9 @@ using GameEvents = TypeList<
   /* Add Game Events here */
   >;
 
-
+#ifdef USE_AUDIO
 #include "events/AudioEvents.hxx"
+#endif // USE_AUDIO
 #include "events/UIEvents.hxx"
 #include "events/MouseEvents.hxx"
 

@@ -7,6 +7,7 @@
 #include <memory>
 #include <list>
 
+#include "../events/AudioEvents.hxx"
 #include "audio/Soundtrack.hxx"
 #include "audio/AudioConfig.hxx"
 #include "../GameService.hxx"

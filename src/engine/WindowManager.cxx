@@ -13,8 +13,7 @@ WindowManager::WindowManager()
   if (!m_window)
     throw UIError(TRACE_INFO "Failed to create window: " + string{SDL_GetError()});
 
-  // Note that providing no flags gives priority to available SDL_RENDERER_ACCELERATED renderers. This should fallback to Software if no renderer is available.
-  m_renderer = SDL_CreateRenderer(m_window, -1, 0);
+  m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED);
 
   if (!m_renderer)
     throw UIError(TRACE_INFO "Failed to create Renderer: " + string{SDL_GetError()});
@@ -94,7 +93,9 @@ void WindowManager::setFullScreenMode(FULLSCREEN_MODE mode) const
 void WindowManager::setWindowTitle(const std::string &title)
 {
   m_title = title;
+  LOG(LOG_DEBUG) << "Setting window " << m_window << "'s title to " << m_title;
   SDL_SetWindowTitle(m_window, m_title.c_str());
+  LOG(LOG_DEBUG) << "???";
 }
 
 void WindowManager::initializeScreenResolutions()

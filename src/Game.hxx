@@ -10,7 +10,7 @@
 #include "util/Meta.hxx"
 #include "GameService.hxx"
 #include "GlobalModel.hxx"
-#ifdef USE_SDL2_MIXER
+#ifdef USE_AUDIO
 #include "services/AudioMixer.hxx"
 #endif
 #include "services/Randomizer.hxx"
@@ -75,7 +75,7 @@ private:
   GameClock m_GameClock;
   Randomizer m_Randomizer;
   ResourceManager m_ResourceManager;
-#ifdef USE_SDL2_MIXER
+#ifdef USE_AUDIO
   AudioMixer m_AudioMixer;
 #endif
   UILoopMQ m_UILoopMQ;
@@ -106,12 +106,14 @@ private:
   struct GameVisitor : public GameService
   {
 
+#ifdef USE_AUDIO
     /**
      * @brief handles valid Audio events
      * @tparam AudioEventType the Audio event
      */
     template <typename AudioEventType>
     EnableIf<ContainsType<AudioEvents, AudioEventType>, void> operator()(AudioEventType &&event);
+#endif // USE_AUDIO
 
     /**
      * @brief handles invalid game events

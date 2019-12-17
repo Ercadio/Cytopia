@@ -9,14 +9,14 @@ include(FetchContent)
 
 option(BUILD_TEST "Build Cytopia Tests" ON)
 option(USE_PACKAGE_MANAGER "Use conan for managing packages" ON)
-option(ENABLE_SDL2_MIXER "Enable SDL2 Mixer" ON)
+option(ENABLE_AUDIO "Enable Audio" ON)
 option(ENABLE_OPENAL_SOFT "Enable OpenAL Soft" ON)
 option(ENABLE_MICROPROFILE "Enable microprofile" OFF)
 option(ENABLE_ANGELSCRIPT "Enable AngelScript" ON)
 option(ENABLE_MOFILEREADER "Enable MofileReader" ON)
 
 # Comment-out uneeded libs
-if (NOT ENABLE_SDL2_MIXER)
+if (NOT ENABLE_AUDIO)
     set(_CC_SDL2_MIXER "# ")
 endif ()
 
@@ -100,7 +100,7 @@ if (USE_PACKAGE_MANAGER)
             CONAN_PKG::zlib
             )
 
-    if (ENABLE_SDL2_MIXER)
+    if (ENABLE_AUDIO)
         list(APPEND _link_libraries CONAN_PKG::sdl2_mixer)
     endif ()
     
@@ -128,7 +128,7 @@ else (USE_PACKAGE_MANAGER)
     pkg_check_modules(SDL2_ttf REQUIRED SDL2_ttf)
     pkg_check_modules(ZLIB REQUIRED zlib)
 
-    if (ENABLE_SDL2_MIXER)
+    if (ENABLE_AUDIO)
         pkg_check_modules(SDL2_mixer REQUIRED SDL2_mixer)
     endif ()
     
@@ -164,7 +164,7 @@ else (USE_PACKAGE_MANAGER)
             ${ZLIB_LIBRARIES}
             )
 
-    if (ENABLE_SDL2_MIXER)
+    if (ENABLE_AUDIO)
         list(APPEND _link_libraries ${SDL2_mixer_LIBRARIES})
     endif ()
     
@@ -215,8 +215,8 @@ if (MINGW)
     list(APPEND _link_libraries mingw32)
 endif ()
 
-if (ENABLE_SDL2_MIXER)
-    list(APPEND _compile_definitions USE_SDL2_MIXER)
+if (ENABLE_AUDIO)
+  list(APPEND _compile_definitions USE_AUDIO)
 endif ()
 
 if (ENABLE_OPENAL_SOFT)

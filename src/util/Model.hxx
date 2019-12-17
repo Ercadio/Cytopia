@@ -13,7 +13,7 @@ struct ChangeNotification
 template <typename DataRepresentation> class Model : public Subject<ChangeNotification<DataRepresentation>>
 {
 public:
-  using ChangeNotification = ChangeNotification<DataRepresentation>;
+  using Notification = ChangeNotification<DataRepresentation>;
 };
 
 #endif // MODEL_HXX_

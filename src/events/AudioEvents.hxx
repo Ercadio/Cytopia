@@ -1,6 +1,9 @@
 #ifndef AUDIO_EVENTS_HXX
 #define AUDIO_EVENTS_HXX
 
+#include "../engine/audio/Soundtrack.hxx"
+#include "../engine/audio/AudioConfig.hxx"
+
 /**
  * @brief the volume level
  */
@@ -90,14 +93,15 @@ struct AudioPruneEvent
  * @brief All audio-related events
  */
 using AudioEvents = TypeList<AudioTriggerEvent, 
-                              AudioTriggerEvent, 
-                              AudioTrigger3DEvent, 
-                              AudioPlayEvent, 
-                              AudioPlay3DEvent,
-                             AudioMusicVolumeChangeEvent, 
-                             AudioSoundVolumeChangeEvent, 
-                             AudioSetMutedEvent, 
-                             AudioStopEvent, 
-                             AudioPruneEvent>;
+  AudioTriggerEvent, 
+  AudioTrigger3DEvent, 
+  AudioPlayEvent, 
+  AudioPlay3DEvent,
+  AudioMusicVolumeChangeEvent, 
+  AudioSoundVolumeChangeEvent, 
+  AudioSetMutedEvent, 
+  AudioStopEvent, 
+  AudioPruneEvent
+>;
 
 #endif
