@@ -4,6 +4,7 @@
 GameClock::GameClock(GameService::ServiceTuple & services) : 
   GameService(services), m_lock(), m_thread{&GameClock::clockLoop, this}
 {
+  LOG(LOG_DEBUG) << "Created GameClock service";
 }
 
 GameClock::~GameClock()

@@ -39,11 +39,6 @@ public:
    */
   virtual ~Game() = default;
 
-  /** @brief starts setting up the game
-    * starts game initialization.
-    */
-  virtual bool initialize();
-
   /** @brief begins the game
     * starts running the game
     * @param SkipMenu if the main menu should be skipped or not

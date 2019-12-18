@@ -5,53 +5,70 @@
 #include "LOG.hxx"
 
 #include <signal.h>
+#include <SDL.h>
+#include <SDL_ttf.h>
+#include <unordered_map>
+#include <iomanip>
+
+template <typename Key, typename Value>
+using Mapping = std::unordered_map<Key, Value>;
+
 void SIG_handler(int signal);
 
 SDL_AssertState AssertionHandler(const SDL_AssertData *, void *);
 
-int protected_main(int argc, char **argv)
+void printHelp(char *);
+
+/* @brief Configurations passed from the CLI */
+struct CLIContext
 {
-  (void)argc;
-  (void)argv;
-
   bool skipMenu = false;
+};
 
-  // add commandline parameter to skipMenu
-  for (int i = 1; i < argc; ++i)
+void protected_main(CLIContext & cliContext)
+{
+
+  LOG(LOG_DEBUG) << "Initializing SDL subsystems";
+
+  if (SDL_Init(SDL_INIT_VIDEO) != 0)
   {
-    if (std::string(argv[i]) == "--skipMenu")
-    {
-      skipMenu = true;
-    }
+    LOG(LOG_ERROR) << "Failed to Init SDL";
+    LOG(LOG_ERROR) << "SDL Error: " << SDL_GetError();
+    exit(1);
+  }
+
+  if (TTF_Init() != 0)
+  {
+    LOG(LOG_ERROR) << "Failed to Init SDL_TTF";
+    LOG(LOG_ERROR) << "SDL Error: " << TTF_GetError();
+    exit(1);
   }
 
   LOG(LOG_DEBUG) << "Launching Cytopia";
 
   Game game;
 
-  LOG(LOG_DEBUG) << "Initializing Cytopia";
-
-  if (!game.initialize())
-    return EXIT_FAILURE;
-
-  if (!skipMenu)
+  if (!cliContext.skipMenu)
   {
-    LOG(LOG_DEBUG) << "Starting Main menu";
+    LOG(LOG_DEBUG) << "Starting main menu";
     game.mainMenu();
   }
 
   LOG(LOG_DEBUG) << "Running the Game";
-  game.run(skipMenu);
+  game.run();
 
   LOG(LOG_DEBUG) << "Closing the Game";
   game.shutdown();
 
-  return EXIT_SUCCESS;
 }
+
+/* @brief All allowed command-line parameters */
+enum CLIParameters { SkipMenu, Help };
 
 int main(int argc, char **argv)
 {
 
+  CLIContext cliContext;
   /* Register handler for Segmentation Fault, Interrupt, Terminate */
   signal(SIGSEGV, SIG_handler);
   signal(SIGINT, SIG_handler);
@@ -61,18 +78,72 @@ int main(int argc, char **argv)
    * by our handler */
   SDL_SetAssertionHandler(AssertionHandler, 0);
 
+  /* First, we parse CLI parameters */
+  {
+    uint8_t i = 1;
+    const Mapping <std::string, CLIParameters> parameter {
+      { "--skipMenu", SkipMenu },
+      { "--help", Help },
+      { "-h", Help },
+    };
+
+    try
+    {
+      for(; i < argc; i++)
+      {
+        switch(parameter.at(argv[i]))
+        {
+          case SkipMenu:
+            cliContext.skipMenu = true;
+            break;
+          case Help:
+            printHelp(argv[0]);
+            return 0;
+        }
+      }
+    }
+    catch(std::out_of_range & e)
+    {
+      std::cerr << "Invalid command line argument: " << argv[i] << std::endl;
+      printHelp(argv[0]);
+      return 1;
+    }
+  }
+  /* Now we start the game */
   try
   {
-    return protected_main(argc, argv);
+    protected_main(cliContext);
   }
   catch (std::exception &e)
   {
     LOG(LOG_ERROR) << e.what();
+    return 1;
   }
   catch (...)
   {
     LOG(LOG_ERROR) << "Caught unknown exception";
+    return 1;
   }
 
-  return EXIT_FAILURE;
+  return 0;
+}
+
+void printHelp(char * programName)
+{
+  using OptionItem = std::pair<std::string, const char *>;
+  const std::array options {
+    OptionItem{ "--skipMenu", "Skips the main menu and starts a game immediately" },
+    OptionItem{ "--help, -h", "Prints this help message" },
+  };
+  /* Compute maximum widths */
+  size_t max_alias_width = std::max_element(options.cbegin(), options.cend(), 
+      [](const OptionItem& it1, const OptionItem& it2) { 
+        return it1.first.size() < it2.first.size(); })->first.size();
+  
+  std::cout << "Usage: " << programName << " [OPTIONS ...]\nOptions:\n";
+  for(const OptionItem & item : options)
+  {
+    std::cout << std::left << std::setw(max_alias_width) << item.first;
+    std::cout << std::setw(10) << ' ' << item.second << '\n';
+  }
 }

@@ -24,6 +24,7 @@ ResourceManager::ResourceManager(GameService::ServiceTuple &services) : GameServ
   ifs >> config_json;
   m_audioConfig = config_json;
 #endif // USE_AUDIO
+  LOG(LOG_DEBUG) << "Created ResourceManager service";
 }
 
 #ifdef USE_AUDIO

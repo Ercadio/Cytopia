@@ -28,7 +28,9 @@ BETTER_ENUM(Action, int, RaiseTerrain, LowerTerrain, QuitGame, Demolish, ChangeT
 UIManager::UIManager(GameService::ServiceTuple & context, GlobalModel & globalModel) : 
   GameService(context),
   m_GlobalModel(globalModel)
-{ }
+{
+  LOG(LOG_DEBUG) << "Created UIManager service";
+}
 
 void UIManager::init()
 {

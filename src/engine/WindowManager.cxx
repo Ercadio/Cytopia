@@ -93,9 +93,7 @@ void WindowManager::setFullScreenMode(FULLSCREEN_MODE mode) const
 void WindowManager::setWindowTitle(const std::string &title)
 {
   m_title = title;
-  LOG(LOG_DEBUG) << "Setting window " << m_window << "'s title to " << m_title;
   SDL_SetWindowTitle(m_window, m_title.c_str());
-  LOG(LOG_DEBUG) << "???";
 }
 
 void WindowManager::initializeScreenResolutions()

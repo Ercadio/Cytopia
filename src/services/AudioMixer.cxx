@@ -90,7 +90,7 @@ AudioMixer::AudioMixer(GameService::ServiceTuple &context) : GameService(context
   onTrackFinishedFunc = [this](int channelID) { return onTrackFinished(channelID); };
   Mix_ChannelFinished(onTrackFinishedFuncPtr);
 #endif // USE_OPENAL_SOFT
-  LOG(LOG_DEBUG) << "Created AudioMixer";
+  LOG(LOG_DEBUG) << "Created AudioMixer service";
 }
 
 AudioMixer::~AudioMixer()

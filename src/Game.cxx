@@ -47,27 +47,7 @@ Game::Game() :
       m_UILoop(&LoopMain<UILoopMQ, UIVisitor>, std::ref(m_GameContext), UIVisitor{}),
       m_EventLoop(&LoopMain<GameLoopMQ, GameVisitor>, std::ref(m_GameContext), GameVisitor{m_GameContext})
 {
-  LOG(LOG_DEBUG) << "Created Game Object";
-}
-
-bool Game::initialize()
-{
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
-  {
-    LOG(LOG_ERROR) << "Failed to Init SDL";
-    LOG(LOG_ERROR) << "SDL Error: " << SDL_GetError();
-    return false;
-  }
-
-  if (TTF_Init() == -1)
-  {
-    LOG(LOG_ERROR) << "Failed to Init SDL_TTF";
-    LOG(LOG_ERROR) << "SDL Error: " << TTF_GetError();
-    return false;
-  }
-
   // initialize window manager
-  WindowManager::instance();
   WindowManager::instance().setWindowTitle(VERSION);
 
 #ifdef USE_MOFILEREADER
@@ -83,9 +63,7 @@ bool Game::initialize()
     LOG(LOG_ERROR) << "Failed to load MO file " << moFilePath;
   }
 #endif
-
-  LOG(LOG_DEBUG) << "Initialized Game Object";
-  return true;
+  LOG(LOG_DEBUG) << "Created Game Object";
 }
 
 void Game::mainMenu()

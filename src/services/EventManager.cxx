@@ -16,7 +16,12 @@
 #include "microprofile.h"
 #endif
 
-EventManager::EventManager(GameService::ServiceTuple &context, GlobalModel &globalModel) : GameService(context), m_GlobalModel(globalModel) { }
+EventManager::EventManager(GameService::ServiceTuple &context, GlobalModel &globalModel) : 
+  GameService(context), 
+  m_GlobalModel(globalModel) 
+{ 
+  LOG(LOG_DEBUG) << "Created EventManager service";
+}
 
 void EventManager::checkEvents(SDL_Event &event, Engine &engine)
 {
