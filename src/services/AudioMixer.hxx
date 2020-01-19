@@ -3,6 +3,8 @@
 
 #include <array>
 #include <unordered_map>
+#include <unordered_set>
+#include <functional>
 #include <vector>
 #include <memory>
 #include <list>
@@ -12,7 +14,7 @@
 #include "audio/AudioConfig.hxx"
 #include "../GameService.hxx"
 #include "../util/Meta.hxx"
-
+#include "../GlobalModel.hxx"
 #ifdef USE_OPENAL_SOFT
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -97,7 +99,7 @@ public:
   /**
    * @pre GameClock must be initialized
    */
-  AudioMixer(GameService::ServiceTuple &);
+  AudioMixer(GameService::ServiceTuple &, GlobalModel &);
   ~AudioMixer();
 
   //for orientation of listener
@@ -120,6 +122,9 @@ public:
   };
 
 private:
+
+  GlobalModel & m_GlobalModel;
+
   /**
    * @brief All the available soundtracks
    */

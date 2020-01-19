@@ -1,12 +1,7 @@
 #ifndef UI_EVENTS_HXX
 #define UI_EVENTS_HXX
 
-/**
- * @brief Event triggered when the game must terminate
- */
-struct TerminateEvent
-{
-};
+#include "../view/iActivity.hxx"
 
 /**
  * @brief Event describing a Widget change
@@ -20,11 +15,11 @@ template <typename UITargetType, typename UpdateEventType> struct UIChangeEvent
 };
 
 /**
- * @brief A Widget transitive change
- * @tparam TransitiveType the transitive type
+ * @brief A tranisition to another iActivity
  */
-template <typename TransitiveType>
-using TransitiveStateChange =
-    UIChangeEvent<ObserverWPtr<typename TransitiveType::Transition>, typename TransitiveType::Transition>;
+struct ActivitySwitchEvent
+{
+ ActivityType activityType;
+};
 
 #endif // UI_EVENTS_HXX

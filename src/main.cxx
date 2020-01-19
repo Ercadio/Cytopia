@@ -48,18 +48,6 @@ void protected_main(CLIContext & cliContext)
 
   Game game;
 
-  if (!cliContext.skipMenu)
-  {
-    LOG(LOG_DEBUG) << "Starting main menu";
-    game.mainMenu();
-  }
-
-  LOG(LOG_DEBUG) << "Running the Game";
-  game.run();
-
-  LOG(LOG_DEBUG) << "Closing the Game";
-  game.shutdown();
-
 }
 
 /* @brief All allowed command-line parameters */

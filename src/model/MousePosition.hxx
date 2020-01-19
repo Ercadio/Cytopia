@@ -16,6 +16,7 @@ class MousePosition : public Model<MousePositionModel>
   MousePositionModel m_Model;
 public:
   void setPosition(MousePositionModel &&);
+  ~MousePosition();
 };
 
 #endif

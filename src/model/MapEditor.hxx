@@ -18,10 +18,12 @@ class MapEditor : public Model<MapEditorModel>
   MapEditorModel m_Model;
 public:
   MapEditor();
+  ~MapEditor();
   void setEditMode(TerrainEditMode);
   void setHighlightColor(int);
   void setTileType(std::string&&);
   const MapEditorModel & getModel() const;
+  TerrainEditMode getEditMode() const;
 };
 
 #endif // MAP_EDITOR_HXX

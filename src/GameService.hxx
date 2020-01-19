@@ -1,18 +1,7 @@
 #ifndef GAME_SERVICE_HXX_
 #define GAME_SERVICE_HXX_
 
-#include "Events.hxx"
-#include "util/MessageQueue.hxx"
-
-/**
- * @brief UI Actor's message queue
- */
-using UILoopMQ = MessageQueue<typename VariantType<UIEvents>::type>;
-
-/**
- * @brief Game loop Actor's message queue
- */
-using GameLoopMQ = MessageQueue<typename VariantType<GameEvents>::type>;
+#include "util/Meta.hxx"
 
 class GameService
 {
@@ -22,16 +11,16 @@ public:
    * @brief all concrete game services
    */
   using Types = TypeList<
-    UILoopMQ *, 
-    GameLoopMQ *, 
+    class UILoopMQ *, 
+    class GameLoopMQ *, 
 #ifdef USE_AUDIO
     class AudioMixer *, 
 #endif // USE_AUDIO
     class Randomizer *, 
     class GameClock *,
     class ResourceManager *, 
-    class EventManager *, 
-    class UIManager * 
+    class MouseController *,
+    class LanguageManager *
     /* Add other services here */
     >;
 

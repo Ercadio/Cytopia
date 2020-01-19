@@ -4,6 +4,8 @@
 #include <memory>
 #include <forward_list>
 
+#include "Meta.hxx"
+
 template <typename T> using LinkedList = std::forward_list<T>;
 template <typename... DataArgs> class Subject;
 
@@ -19,9 +21,9 @@ template <typename... DataArgs> class Observer
 protected:
   Observer() noexcept = default;
   virtual ~Observer() noexcept = 0;
-
+  using Notification = typename VariantType<TypeList<DataArgs...>>::type;
 private:
-  virtual void update(DataArgs...) noexcept = 0;
+  virtual void update(Notification) noexcept = 0;
   friend Subject<DataArgs...>;
 };
 
@@ -47,14 +49,15 @@ protected:
    */
   Subject() = default;
 
-  using ObsIterator = typename LinkedList<ObserverWPtr<DataArgs...>>::iterator;
+  using Notification = typename VariantType<TypeList<DataArgs...>>::type;
+  using ObsIterator = typename LinkedList<ObserverWPtr<Notification>>::iterator;
 
   /**
    * @nothrow
    * @brief notifies all affected observers
    * @param args the data to be sent to observers
    */
-  inline void notifyObservers(DataArgs... args) noexcept
+  inline void notifyObservers(Notification&& notification) noexcept
   {
     ObsIterator old;
     bool mustCleanup = false;
@@ -73,9 +76,9 @@ protected:
     for (ObserverWPtr<DataArgs...> it : m_Observers)
     {
       auto observer = it.lock();
-      if (mustNotify(it, args...))
+      if (mustNotify(it, notification))
       {
-        observer->update(args...);
+        observer->update(notification);
       }
     }
   }
@@ -98,7 +101,7 @@ protected:
    * @param observer the observer to be notified
    * @param data the data to be sent to observer
    */
-  virtual inline bool mustNotify(ObserverWPtr<DataArgs...> observer, const DataArgs &... data) const noexcept { return true; }
+  virtual inline bool mustNotify(ObserverWPtr<DataArgs...> observer, const Notification & data) const noexcept { return true; }
 
 public:
   /**

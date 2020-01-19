@@ -1,6 +1,10 @@
 #ifndef MOUSE_EVENTS_HXX
 #define MOUSE_EVENTS_HXX
 
+#include <SDL2/SDL.h>
+
+#include "../util/Meta.hxx"
+
 /**
  * @brief A change in the mouse (or device)'s position
  */
@@ -10,6 +14,7 @@ struct MousePositionEvent
   int yPosition;
   int xVelocity;
   int yVelocity;
+  explicit MousePositionEvent(const SDL_Event &);
 };
 
 /**
@@ -24,14 +29,13 @@ struct ClickEvent
    * @details Exactly one of {Left, Right, Middle} must be set 
    *          and exactly one of {Pressed, Released} must be set
    */
-  enum State : uint8_t { 
-    Left = 0b1,
-    Right = 0b10, 
-    Middle = 0b100,
-    Pressed = 0b1000,
-    Released = 0b10000,
-  };
-  State state;
+  static constexpr uint8_t Left = 0b1;
+  static constexpr uint8_t Right = 0b10;
+  static constexpr uint8_t Middle = 0b100;
+  static constexpr uint8_t Pressed = 0b1000;
+  static constexpr uint8_t Released = 0b10000;
+  uint8_t state;
+  explicit ClickEvent(const SDL_Event &);
 };
 
 /**
@@ -41,6 +45,7 @@ struct ScrollEvent
 {
   int32_t xDisplacement;
   int32_t yDisplacement;
+  explicit ScrollEvent(const SDL_Event &);
 };
 
 using MouseEvents = TypeList<

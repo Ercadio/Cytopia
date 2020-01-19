@@ -16,6 +16,7 @@ class Randomizer : public GameService
 
 public:
   Randomizer(GameService::ServiceTuple &context) : GameService(context) {}
+  ~Randomizer();
 
   /**
    * @returns a random iterator between [begin, end)

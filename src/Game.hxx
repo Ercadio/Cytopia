@@ -5,8 +5,8 @@
 #define VERSION 0
 #endif
 
+#include "view/Window.hxx"
 #include "Scripting/ScriptEngine.hxx"
-#include "util/MessageQueue.hxx"
 #include "util/Meta.hxx"
 #include "GameService.hxx"
 #include "GlobalModel.hxx"
@@ -16,18 +16,22 @@
 #include "services/Randomizer.hxx"
 #include "services/GameClock.hxx"
 #include "services/ResourceManager.hxx"
-#include "services/EventManager.hxx"
+#include "services/MouseController.hxx"
+#include "services/LanguageManager.hxx"
 #include "LOG.hxx"
 #include "Exception.hxx"
+#include "engine/MessageQueue.hxx"
+#include "Events.hxx"
 
 #include <thread>
 
 using Thread = std::thread;
-using RuntimeError = std::runtime_error;
 
-class Game
+class Game : public Window
 {
+
 public:
+
   /**
    * @brief Creates a game
    * @details Initializes all GameServices and starts the threads
@@ -37,44 +41,28 @@ public:
   /**
    * @brief Destroy a game
    */
-  virtual ~Game() = default;
-
-  /** @brief begins the game
-    * starts running the game
-    * @param SkipMenu if the main menu should be skipped or not
-    */
-  virtual void run(bool SkipMenu = false);
-
-  /** @brief ends the game
-    * shuts down the game
-    */
-  virtual void shutdown();
-
-  /** @brief initializes and displays the main menu
-    * initializes and displays the main menu
-    */
-  virtual void mainMenu();
+  ~Game();
 
 private:
 
   /* Global Model */
   GlobalModel m_GlobalModel;
-
-  /* Game context */
-  using GameContext = GameService::ServiceTuple;
-  GameContext m_GameContext;
 	
   /* Services */
-  EventManager m_EventManager;
-  UIManager m_UIManager;
   GameClock m_GameClock;
   Randomizer m_Randomizer;
   ResourceManager m_ResourceManager;
 #ifdef USE_AUDIO
   AudioMixer m_AudioMixer;
 #endif
+  MouseController m_MouseController;
+  LanguageManager m_LanguageManager;
   UILoopMQ m_UILoopMQ;
   GameLoopMQ m_GameLoopMQ;
+
+  /* Game context */
+  using GameContext = GameService::ServiceTuple;
+  GameContext m_GameContext;
 
   /* Threads */
   Thread m_UILoop;
@@ -91,11 +79,6 @@ private:
      */
     template <typename ArgumentType> void operator()(ArgumentType &&event);
 
-    /**
-     * @brief handles TransitiveStateChange messages
-     * @tparam TransitiveType the type which transitions
-     */
-    template <typename TransitiveType> void operator()(TransitiveStateChange<TransitiveType> &&event);
   };
 
   struct GameVisitor : public GameService
@@ -103,18 +86,22 @@ private:
 
 #ifdef USE_AUDIO
     /**
-     * @brief handles valid Audio events
-     * @tparam AudioEventType the Audio event
+     * @brief handles valid AudioEvents
+     * @tparam AudioEventType the AudioEvent
      */
     template <typename AudioEventType>
     EnableIf<ContainsType<AudioEvents, AudioEventType>, void> operator()(AudioEventType &&event);
 #endif // USE_AUDIO
-
+    
     /**
-     * @brief handles invalid game events
-     * @tparam ArgumentType the invalid game event
+     * @brief handles valid MouseEvents
+     * @tparam MouseEventType the MouseEvent
      */
+    template <typename MouseEventType>
+    EnableIf<ContainsType<MouseEvents, MouseEventType>, void> operator()(MouseEventType &&event);
+
     template <typename ArgumentType> void operator()(const ArgumentType &&event);
+
   };
 };
 

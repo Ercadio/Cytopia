@@ -1,9 +1,17 @@
 #include "Soundtrack.hxx"
 #include "../util/Exception.hxx"
 #include "../util/LOG.hxx"
-#include "../basics/Settings.hxx"
 
-Soundtrack::Soundtrack(SoundtrackID id, ChannelID channelID, Mix_Chunk *chunks, RepeatCount repeat, bool isMusic, bool isPlaying, bool isPlayable, bool isTriggerable)
+Soundtrack::Soundtrack(
+    SoundtrackID id, 
+    ChannelID channelID, 
+    Mix_Chunk *chunks, 
+    RepeatCount repeat, 
+    bool isMusic, 
+    bool isPlaying, 
+    bool isPlayable, 
+    bool isTriggerable,
+    ChannelPlayback playbackType)
     : 
 	ID(id), 
 	Channel(channelID),
@@ -25,7 +33,7 @@ Soundtrack::Soundtrack(SoundtrackID id, ChannelID channelID, Mix_Chunk *chunks, 
     throw AudioError(TRACE_INFO "Could not create buffers: Error " + std::to_string(errorCode));
 
   /* set buffer data */
-  ALenum format = Settings::instance().audio3DStatus ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+  ALenum format = playbackType == +ChannelPlayback::Stereo ? AL_FORMAT_STEREO16 : AL_FORMAT_MONO16;
   /* parameters: buffer, format, data, sample length, frequency(sample rate) */
   alBufferData(buffer, format, chunks->abuf, chunks->alen,
                44100);

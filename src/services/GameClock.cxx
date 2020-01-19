@@ -9,6 +9,7 @@ GameClock::GameClock(GameService::ServiceTuple & services) :
 
 GameClock::~GameClock()
 {
+  LOG(LOG_DEBUG) << "Stopping GameClock";
   createDefferedTask(0s, Callback{nullptr});
   m_thread.join();
 }
@@ -24,6 +25,7 @@ void GameClock::clockLoop()
       {
         if (m_Deffered.top().callback == nullptr)
           return;
+        LOG(LOG_DEBUG) << "Triggering a defferred task";
         m_Deffered.top().callback();
         m_Deffered.pop();
       }
@@ -31,6 +33,7 @@ void GameClock::clockLoop()
       {
         RepeatedTask top {m_Repeated.top()};
         m_Repeated.pop();
+        LOG(LOG_DEBUG) << "Triggering a repeated task";
         top.callback();
         top.waketime += top.interval;
         m_Repeated.emplace(std::move(top));

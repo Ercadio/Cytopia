@@ -10,12 +10,15 @@
 #endif // USE_AUDIO
 #include "../GameService.hxx"
 #include "../util/Meta.hxx"
+#include "../GlobalModel.hxx"
 
 template <typename Key, typename Value>
 using Mapping = std::unordered_map<Key, Value>;
 
 class ResourceManager : public GameService
 {
+
+  GlobalModel & m_GlobalModel;
 
   template <typename ResourceType>
   struct ResourceItem
@@ -63,7 +66,8 @@ public:
    * @brief Creates the ResourceManager 
    *  @throws ConfigurationError when loading configuration results in an error
    */
-  ResourceManager(GameService::ServiceTuple &);
+  ResourceManager(GameService::ServiceTuple &, GlobalModel &);
+  ~ResourceManager();
 
 #ifdef USE_AUDIO
   /**

@@ -5,21 +5,21 @@
 
 using string = std::string;
 
-/* This is the simple way to use Observers */
+/* This is the basic way to use Observers */
 
-struct MyTestSubject : public Subject<>
+struct MyTestSubject : public Subject<int>
 {
   /* This could be any call that ultimately
    * triggers an event */
-  void modifySubject(void) { notifyObservers(); }
+  void modifySubject(void) { notifyObservers(0); }
 };
 
-struct MyTestObserver : public Observer<>
+struct MyTestObserver : public Observer<int>
 {
   int notifyCount = 0;
 
 private:
-  void update(void) noexcept override { notifyCount++; }
+  void update(Notification) noexcept override { notifyCount++; }
 };
 
 SCENARIO("Observers listen to their Subject", "[util]")
@@ -27,7 +27,7 @@ SCENARIO("Observers listen to their Subject", "[util]")
   GIVEN("I have an observer that listens to a subject")
   {
     MyTestSubject subject;
-    ObserverSPtr<> observer = std::make_shared<MyTestObserver>();
+    ObserverSPtr<int> observer = std::make_shared<MyTestObserver>();
     subject.addObserver(observer);
     /* As you can see, it's ugly and bad to downcast.
        Observers should not keep any state, or have any
@@ -55,12 +55,12 @@ public:
   void setX(int x)
   {
     m_x = x;
-    notifyObservers(m_x, m_y, m_z);
+    notifyObservers(m_x);
   }
   void setY(bool y)
   {
     m_y = y;
-    notifyObservers(m_x, m_y, m_z);
+    notifyObservers(m_y);
   }
   void setZ(string z)
   {
@@ -70,7 +70,7 @@ public:
     if (m_z != z)
     {
       m_z = std::move(z);
-      notifyObservers(m_x, m_y, m_z);
+      notifyObservers(m_z);
     }
   }
   virtual inline void onObserverExpired() noexcept final {}
@@ -88,13 +88,22 @@ private:
 
     explicit FirstObserver(MyListener &listener) : m_listener(listener) {}
 
-    void update(int x, bool y, string z) noexcept
+    void update(Notification notif) noexcept
     {
       /* All inner classes are friends of their outer
        * classes in C++ */
-      m_listener.m_x = x;
-      m_listener.m_y = y;
-      m_listener.m_z = z;
+      switch(notif.index())
+      {
+        case 0:
+          m_listener.m_x = std::get<int>(notif);
+          break;
+        case 1:
+          m_listener.m_y = std::get<bool>(notif);
+          break;
+        case 2:
+          m_listener.m_z = std::get<string>(notif);
+          break;
+      }
       m_listener.m_notifyCount++;
       /* In a real listener, this is where we would control
          something (for example: a UIElement, or trigger an event) */

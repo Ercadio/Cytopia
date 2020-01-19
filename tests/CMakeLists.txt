@@ -46,14 +46,9 @@ endforeach ()
 LIST(APPEND TEST_SOURCES
         main.cxx
         Example.cxx
-        engine/ResourcesManager.cxx
-        engine/Engine.cxx
-        engine/WindowManager.cxx
         services/GameClock.cxx
-        ui/widgets/Text.cxx
         util/Meta.cxx
         util/Observer.cxx
-        util/TransitiveModel.cxx
         util/MessageQueue.cxx
         util/LOG.cxx
         )

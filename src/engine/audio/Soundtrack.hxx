@@ -6,7 +6,7 @@
 #include <string>
 
 #include "../../util/Meta.hxx"
-
+#include "../model/Settings.hxx"
 #ifdef USE_OPENAL_SOFT
 #include "AL/al.h"
 #include "AL/alc.h"
@@ -78,7 +78,7 @@ struct Soundtrack
 
 #endif // USE_OPENAL_SOFT
 
-  Soundtrack(SoundtrackID, ChannelID, Mix_Chunk*, RepeatCount, bool, bool, bool, bool);
+  Soundtrack(SoundtrackID, ChannelID, Mix_Chunk*, RepeatCount, bool, bool, bool, bool, ChannelPlayback);
   ~Soundtrack();
 };
 

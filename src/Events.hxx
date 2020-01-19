@@ -3,9 +3,8 @@
 
 #include <string>
 
-#include "betterEnums.hxx"
+#include <betterEnums.hxx>
 #include "util/Meta.hxx"
-#include "util/TransitiveModel.hxx"
 
 using std::string;
 
@@ -13,7 +12,8 @@ using std::string;
  * @brief Events to be handled by the UI Loop
  */
 using UIEvents = TypeList<
-  struct TerminateEvent 
+  struct TerminateEvent,
+  struct ActivitySwitchEvent 
   /* Add UI Events here */
   >;
 
@@ -31,14 +31,22 @@ using GameEvents = TypeList<
   /* All MouseEvents */
   struct MousePositionEvent,
   struct ClickEvent,
-  struct ScrollEvent
+  struct ScrollEvent,
+  struct ActivitySwitchEvent 
   /* Add Game Events here */
   >;
+
+/**
+ * @brief Event triggered when the game must terminate
+ */
+struct TerminateEvent
+{
+};
+
+#endif
 
 #ifdef USE_AUDIO
 #include "events/AudioEvents.hxx"
 #endif // USE_AUDIO
 #include "events/UIEvents.hxx"
 #include "events/MouseEvents.hxx"
-
-#endif

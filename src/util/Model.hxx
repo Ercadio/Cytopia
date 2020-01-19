@@ -8,12 +8,11 @@ struct ChangeNotification
 {
   DataRepresentation before;
   DataRepresentation after;
+  ChangeNotification(DataRepresentation & before, DataRepresentation & after) : before(before), after(after) { }
 };
 
-template <typename DataRepresentation> class Model : public Subject<ChangeNotification<DataRepresentation>>
+template <typename... DataRepresentations> class Model : public Subject<ChangeNotification<DataRepresentations>...>
 {
-public:
-  using Notification = ChangeNotification<DataRepresentation>;
 };
 
 #endif // MODEL_HXX_

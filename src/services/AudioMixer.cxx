@@ -1,11 +1,11 @@
 #include "AudioMixer.hxx"
-#include "basics/Settings.hxx"
+#include "../model/Settings.hxx"
 #include "LOG.hxx"
 #include "Exception.hxx"
 #include "../services/ResourceManager.hxx"
 #include "../services/GameClock.hxx"
 #include "../services/Randomizer.hxx"
-#include "common/JsonSerialization.hxx"
+#include "../engine/MessageQueue.hxx"
 
 #include <fstream>
 
@@ -16,9 +16,11 @@ template <typename Type, size_t N> using Array = std::array<Type, N>;
 
 std::function<void(int)> AudioMixer::onTrackFinishedFunc;
 
-AudioMixer::AudioMixer(GameService::ServiceTuple &context) : GameService(context)
+AudioMixer::AudioMixer(GameService::ServiceTuple &context, GlobalModel & model) : 
+  GameService(context), m_GlobalModel(model)
 {
-  string fName = SDL_GetBasePath() + Settings::instance().audioConfigJSONFile.get();
+  string fName = SDL_GetBasePath();
+  fName += Settings::AudioConfigJSONFile;
   ifstream ifs(fName);
   if (!ifs)
     throw ConfigurationError(TRACE_INFO "Couldn't open file " + fName);
@@ -31,17 +33,16 @@ AudioMixer::AudioMixer(GameService::ServiceTuple &context) : GameService(context
   for (auto &item : audioConfig.Sound)
     for (auto &trigger : item.second.triggers)
       m_Triggers[trigger].emplace_back(item.first);
-#ifdef USE_OPENAL_SOFT
-  if (Settings::instance().audio3DStatus)
+  if (std::get<Settings>(m_GlobalModel).getPlayback() == +ChannelPlayback::Stereo)
   {
-    LOG(LOG_INFO) << "Using mono sounds";
-    if (Mix_OpenAudio(44100, AUDIO_S16SYS, 1, 1024) == -1)
+    LOG(LOG_INFO) << "Using stereo sounds";
+    if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1)
       throw AudioError(TRACE_INFO + string{"Unable to open audio channels "} + Mix_GetError());
   }
   else
   {
-    LOG(LOG_INFO) << "Using stereo sounds";
-    if (Mix_OpenAudio(44100, AUDIO_S16SYS, 2, 1024) == -1)
+    LOG(LOG_INFO) << "Using mono sounds";
+    if (Mix_OpenAudio(44100, AUDIO_S16SYS, 1, 1024) == -1)
       throw AudioError(TRACE_INFO + string{"Unable to open audio channels "} + Mix_GetError());
   }
   /* use default audio device */
@@ -81,15 +82,6 @@ AudioMixer::AudioMixer(GameService::ServiceTuple &context) : GameService(context
 
   /* Set a pruning repeated task to get rid of soundtracks that have finished playing */
   GetService<GameClock>().createRepeatedTask(5min, [&mixer = *this]() { mixer.prune(); });
-
-#else  // USE_OPENAL_SOFT
-  LOG(LOG_INFO) << "Using stereo sounds";
-  if (Mix_OpenAudio(44100, AUDIO_S16SYS, DEFAULT_CHANNELS::value, 1024) == -1)
-    throw AudioError(TRACE_INFO + string{"Unable to open audio channels "} + Mix_GetError());
-  /* Set up the Mix_ChannelFinished callback */
-  onTrackFinishedFunc = [this](int channelID) { return onTrackFinished(channelID); };
-  Mix_ChannelFinished(onTrackFinishedFuncPtr);
-#endif // USE_OPENAL_SOFT
   LOG(LOG_DEBUG) << "Created AudioMixer service";
 }
 

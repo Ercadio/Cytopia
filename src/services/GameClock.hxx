@@ -1,9 +1,11 @@
 #ifndef GAME_CLOCK_HXX_
 #define GAME_CLOCK_HXX_
 
+#include <mutex>
 #include <queue>
 #include <thread>
 #include <chrono>
+#include <functional>
 
 #include "../GameService.hxx"
 

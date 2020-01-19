@@ -1,22 +1,28 @@
-#include "ResourceManager.hxx"
+#include <fstream>
+#include <json.hxx>
+#ifdef USE_AUDIO
+#include <AL/al.h>
+#include <AL/alc.h>
+#endif // USE_AUDIO
 
-#ifdef USE_OPENAL_SOFT
-#include "AL/al.h"
-#include "AL/alc.h"
-#endif
+#include "ResourceManager.hxx"
 #include "../util/Exception.hxx"
 #include "../util/LOG.hxx"
-
-#include "common/JsonSerialization.hxx"
-#include <fstream>
+#include "../model/Settings.hxx"
+#include "../GlobalModel.hxx"
 
 using ifstream = std::ifstream;
 using nlohmann::json;
 
-ResourceManager::ResourceManager(GameService::ServiceTuple &services) : GameService(services), m_Age(0), m_CacheSize(0)
+ResourceManager::ResourceManager(GameService::ServiceTuple &services, GlobalModel & model) : 
+  GameService(services),
+  m_GlobalModel(model), 
+  m_Age(0), 
+  m_CacheSize(0)
 {
 #ifdef USE_AUDIO
-  string fName = SDL_GetBasePath() + Settings::instance().audioConfigJSONFile.get();
+  string fName = SDL_GetBasePath();
+  fName += Settings::AudioConfigJSONFile;
   ifstream ifs(fName);
   if (!ifs)
     throw ConfigurationError(TRACE_INFO "Couldn't open file " + fName);
@@ -25,6 +31,11 @@ ResourceManager::ResourceManager(GameService::ServiceTuple &services) : GameServ
   m_audioConfig = config_json;
 #endif // USE_AUDIO
   LOG(LOG_DEBUG) << "Created ResourceManager service";
+}
+
+ResourceManager::~ResourceManager()
+{
+  LOG(LOG_DEBUG) << "Destroying ResourceManager";
 }
 
 #ifdef USE_AUDIO
@@ -45,16 +56,22 @@ void ResourceManager::fetch(SoundtrackID id)
   }
   else if (m_audioConfig.Sound.count(id.get()) > 0)
     config = &m_audioConfig.Sound.at(id.get());
-  if (Settings::instance().audio3DStatus)
-    filepath = SDL_GetBasePath() + config->monoFilePath;
-  else
-    filepath = SDL_GetBasePath() + config->stereoFilePath;
+  switch(std::get<Settings>(m_GlobalModel).getPlayback())
+  {
+    case ChannelPlayback::Stereo:
+      filepath = SDL_GetBasePath() + config->stereoFilePath;
+      break;
+    case ChannelPlayback::Mono: [[fallthrough]];
+    case ChannelPlayback::ThreeDimensional:
+      filepath = SDL_GetBasePath() + config->monoFilePath;
+      break;
+  }
   LOG(LOG_INFO) << "Fetching " << id.get() << " at " << filepath;
   Mix_Chunk *chunk = Mix_LoadWAV(filepath.c_str());
   if (!chunk)
     throw AudioError(TRACE_INFO "Could not read sound file: " + string{Mix_GetError()});
   m_CacheSize += sizeof(Mix_Chunk) + sizeof(Soundtrack) + sizeof(SoundtrackResource) + chunk->alen;
-  auto soundtrack = new Soundtrack{id, ChannelID{-1}, chunk, RepeatCount{0}, isMusic, false, true, true};
+  auto soundtrack = new Soundtrack{id, ChannelID{-1}, chunk, RepeatCount{0}, isMusic, false, true, true, std::get<Settings>(m_GlobalModel).getPlayback()};
   m_soundtracks[id] = SoundtrackResource{ SoundtrackUPtr{soundtrack}, m_Age++ };
   LOG(LOG_INFO) << "Resource cache is now at " << (m_CacheSize / 1000000) << "MB";
   if (m_CacheSize > MAX_RESOURCE_BYTES::value) prune();

@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include "../../util/Meta.hxx"
+#include "../../src/util/Meta.hxx"
 #include <ratio>
 
 TEST_CASE("You can use a TypeList like a safe linked list", "[util]")
