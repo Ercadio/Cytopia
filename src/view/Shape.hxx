@@ -4,11 +4,13 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
+#include "../util/Point.hxx"
+
 class iShape
 {
 public:
-  virtual bool contains() const noexcept = 0;
-  virtual bool boxContains() const noexcept = 0;
+  virtual bool contains(const Point2D &) const noexcept = 0;
+  virtual class Rectangle getBounds() const noexcept = 0;
 };
 
 class Rectangle : public iShape
@@ -19,11 +21,12 @@ class Rectangle : public iShape
   int m_y2;
 public:
   Rectangle(int x1, int y1, int x2, int y2);
-  virtual bool contains() const noexcept override;
-  virtual bool boxContains() const noexcept override;
+  bool contains(const Point2D &) const noexcept override;
+  class Rectangle getBounds() const noexcept override;
   SDL_Rect to_SDL() const noexcept;
   int width() const noexcept;
   int height() const noexcept;
+  std::pair<int, int> position() const noexcept;
   friend std::ostream& operator<<(std::ostream&, const Rectangle&);
 };
 

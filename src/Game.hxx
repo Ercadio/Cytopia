@@ -72,13 +72,14 @@ private:
 
   struct UIVisitor
   {
+    UIVisitor(Window &);
+    void operator()(TerminateEvent &&event);
 
-    /**
-     * @brief handles invalid UI events
-     * @tparam ArgumentType the invalid event
-     */
-    template <typename ArgumentType> void operator()(ArgumentType &&event);
+    void operator()(ActivitySwitchEvent &&);
 
+    void operator()(WindowResizeEvent &&);
+  private:
+    Window & m_Window;
   };
 
   struct GameVisitor : public GameService
@@ -90,7 +91,8 @@ private:
      * @tparam AudioEventType the AudioEvent
      */
     template <typename AudioEventType>
-    EnableIf<ContainsType<AudioEvents, AudioEventType>, void> operator()(AudioEventType &&event);
+    EnableIf<ContainsType<AudioEvents, AudioEventType>, void>
+    operator()(AudioEventType &&event);
 #endif // USE_AUDIO
     
     /**
@@ -98,9 +100,12 @@ private:
      * @tparam MouseEventType the MouseEvent
      */
     template <typename MouseEventType>
-    EnableIf<ContainsType<MouseEvents, MouseEventType>, void> operator()(MouseEventType &&event);
+    EnableIf<ContainsType<MouseEvents, MouseEventType>, void>
+    operator()(MouseEventType &&event);
+    
+    void operator()(TerminateEvent &&event);
 
-    template <typename ArgumentType> void operator()(const ArgumentType &&event);
+    void operator()(ActivitySwitchEvent &&);
 
   };
 };

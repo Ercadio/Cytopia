@@ -38,12 +38,6 @@ struct PositionHint
 class MarginConfiguration : public PositionHint { };
 class PaddingConfiguration : public PositionHint { };
 
-struct AbsolutePosition
-{
-  Measurement top;
-  Measurement left;
-};
-
 constexpr Measurement operator""_lh(unsigned long long);
 constexpr Measurement operator""_lw(unsigned long long);
 constexpr Measurement operator""_eh(unsigned long long);
@@ -54,5 +48,14 @@ constexpr Measurement operator+(const Measurement &, const Measurement &);
 constexpr Measurement operator-(const Measurement &, const Measurement &);
 
 #include "BoxSizing.inl.hxx"
+
+struct AbsolutePosition
+{
+  Measurement top;
+  Measurement left;
+  static constexpr AbsolutePosition Origin() { return {0_px, 0_px}; }
+  static constexpr AbsolutePosition Center() { return {50_lw - 50_ew, 50_lh - 50_eh}; }
+};
+
 
 #endif // BOX_SIZING_HXX

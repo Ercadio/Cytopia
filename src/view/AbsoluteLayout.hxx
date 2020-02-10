@@ -3,15 +3,17 @@
 
 #include "iLayout.hxx"
 
-class AbsoluteLayout : public virtual iLayout
+class AbsoluteLayout : public iLayout
 {
-  std::vector<BoxSizing> m_Sizes;
-  std::vector<AbsolutePosition> m_Positions;
 protected:
   void computeBoundaries() noexcept final;
-  void addElement(iWidgetPtr&&, BoxSizing&&, AbsolutePosition &&);
+  void addElement(iViewElementPtr&&, BoxSizing&&, AbsolutePosition &&);
 private:
   using iLayout::addElement;
+  std::vector<BoxSizing> m_Sizes;
+  std::vector<AbsolutePosition> m_Positions;
+public:
+  using iLayout::iLayout; 
 };
 
 #endif // ABSOLUTE_LAYOUT_HXX

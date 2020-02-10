@@ -52,4 +52,22 @@ struct Point
 
 bool operator==(const Point2D &, const Point2D &);
 
+struct SpatialBlock
+{
+  int x;
+  int y;
+  explicit SpatialBlock(const class MousePositionEvent &);
+  explicit SpatialBlock(const class ClickEvent &);
+  SpatialBlock(int, int);
+  using BlockSize = Constant<128>;
+};
+
+bool operator==(const SpatialBlock &, const SpatialBlock &);
+
+template <>
+struct std::hash<SpatialBlock>
+{
+  std::size_t operator()(const SpatialBlock & b) const noexcept;
+};
+
 #endif

@@ -6,13 +6,14 @@
 
 class iView
 {
-  Rectangle m_Bounds;
   friend class AbsoluteLayout;
   friend class Window;
 public:
   iView();
   virtual void draw(iRendererPtr &) const noexcept = 0;
-  const Rectangle & getBounds() const noexcept;
+  virtual const Rectangle & getBounds() const noexcept = 0;
+private:
+  virtual void setBounds(Rectangle &&) noexcept = 0;
 };
 
 #endif // I_VIEW_HXX

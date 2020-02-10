@@ -33,3 +33,8 @@ ClickEvent::ClickEvent(const SDL_Event & event) :
   }
   state |= (event.button.type == SDL_MOUSEBUTTONDOWN) ? ClickEvent::Pressed : ClickEvent::Released;
 }
+
+ScrollEvent::ScrollEvent(const SDL_Event & event) :
+  xDisplacement(event.wheel.x),
+  yDisplacement(event.wheel.y)
+{ }

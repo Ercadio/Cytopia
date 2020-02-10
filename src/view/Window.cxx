@@ -3,13 +3,16 @@
 #include "../util/LOG.hxx"
 #include <SDL_image.h>
 
+using namespace std::chrono_literals;
+
 Window::Window(const char * title, unsigned int width, unsigned int height, bool isFullScreen, const string & windowIcon)
 {
   m_Window = SDL_CreateWindow(title, 
       SDL_WINDOWPOS_CENTERED, 
       SDL_WINDOWPOS_CENTERED, 
       width, height, 
-      isFullScreen ? SDL_WINDOW_FULLSCREEN : 0);
+      isFullScreen ? SDL_WINDOW_FULLSCREEN : 0 |
+      SDL_WINDOW_RESIZABLE);
   if (!m_Window)
     throw UIError(TRACE_INFO "Failed to create window: " + string{SDL_GetError()});
 
@@ -33,15 +36,25 @@ Window::~Window()
 
 void Window::setActivity(iActivityPtr activity)
 {
+  m_Renderer->clear();
   std::swap(m_Activity, activity);
-  m_Activity->m_Bounds = getBounds();
   LOG(LOG_DEBUG) << "Setting up new activity";
   m_Activity->setup();
   LOG(LOG_DEBUG) << "Drawing new activity";
   m_Activity->draw(m_Renderer);
+  m_Renderer->commit();
 }
 
 Rectangle Window::getBounds() const noexcept
 {
   return m_Renderer->getDrawableSize();
+}
+
+void Window::handleEvent(WindowResizeEvent &&event)
+{
+  m_Renderer->clear();
+  m_Activity->setBounds(getBounds());
+  m_Activity->setup();
+  m_Activity->draw(m_Renderer);
+  m_Renderer->commit();
 }

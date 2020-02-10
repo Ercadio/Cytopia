@@ -14,6 +14,12 @@ set(SOURCE_FILES
   Windows/icon_tiledataeditor.rc
   Windows/resource.h
   Windows/tiledataeditor.ico
+  controller/ButtonHandler.hxx
+  controller/ButtonHandler.cxx
+  controller/iController.hxx
+  controller/iController.cxx
+  controller/iMouseHandler.hxx
+  controller/iMouseHandler.cxx
   engine/DefaultGenerator.hxx
   engine/DefaultGenerator.cxx
   engine/MessageQueue.hxx
@@ -24,6 +30,10 @@ set(SOURCE_FILES
   events/MouseEvents.hxx
   events/UIEvents.hxx
   main.cxx
+  model/iState.hxx
+  model/iState.cxx
+  model/ButtonState.hxx
+  model/ButtonState.cxx
   model/Map.cxx
   model/Map.hxx
   model/Map.inl.hxx
@@ -61,13 +71,21 @@ set(SOURCE_FILES
   util/filesystem.hxx
   view/AbsoluteLayout.hxx
   view/AbsoluteLayout.cxx
+  view/AssetHelper.hxx
+  view/AssetHelper.cxx
   view/BoxSizing.hxx
   view/BoxSizing.inl.hxx
   view/BoxSizing.cxx
-  view/ButtonWidget.cxx
-  view/ButtonWidget.hxx
+  view/Color.hxx
+  view/Color.cxx
+  view/TextButton.cxx
+  view/TextButton.hxx
   view/MainMenuActivity.cxx
   view/MainMenuActivity.hxx
+  view/IconButton.hxx
+  view/IconButton.cxx
+  view/ImageView.hxx
+  view/ImageView.cxx
   view/iRenderer.hxx
   view/iRenderer.cxx
   view/Shape.hxx
@@ -80,8 +98,8 @@ set(SOURCE_FILES
   view/iLayout.cxx
   view/iView.hxx
   view/iView.cxx
-  view/iWidget.hxx
-  view/iWidget.cxx
+  view/iViewElement.hxx
+  view/iViewElement.cxx
   view/SDLRenderer.hxx
   view/SDLRenderer.cxx
   )

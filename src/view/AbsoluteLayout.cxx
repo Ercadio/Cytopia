@@ -2,7 +2,7 @@
 #include "../util/ZipRange.hxx"
 #include "../util/LOG.hxx"
 
-void AbsoluteLayout::addElement(iWidgetPtr&& pWid, BoxSizing&& bs, AbsolutePosition&& ap)
+void AbsoluteLayout::addElement(iViewElementPtr&& pWid, BoxSizing&& bs, AbsolutePosition&& ap)
 {
   addElement(std::move(pWid));
   m_Sizes.emplace_back(bs);
@@ -12,7 +12,8 @@ void AbsoluteLayout::addElement(iWidgetPtr&& pWid, BoxSizing&& bs, AbsolutePosit
 void AbsoluteLayout::computeBoundaries() noexcept
 {
   LOG(LOG_DEBUG) << "Computing boundaries";
-  MeasurementValuation mv { 0, 0, m_Bounds.width(), m_Bounds.height() };
+  const auto & bounds = getBounds();
+  MeasurementValuation mv { 0, 0, bounds.width(), bounds.height() };
   for(auto [size, position, element] : 
         ZipRange{m_Sizes, m_Positions, elements()})
   {

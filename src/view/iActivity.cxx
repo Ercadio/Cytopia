@@ -15,7 +15,3 @@ void iActivity::activitySwitch(ActivityType type)
   GetService<GameLoopMQ>().push(ActivitySwitchEvent{type});
 }
 
-Rectangle iActivity::getBounds() const noexcept
-{
-  return m_Window.getBounds();
-}

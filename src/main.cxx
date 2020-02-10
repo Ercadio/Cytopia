@@ -79,6 +79,7 @@ int main(int argc, char **argv)
     {
       for(; i < argc; i++)
       {
+        std::cout << argv[i] << std::endl;
         switch(parameter.at(argv[i]))
         {
           case SkipMenu:

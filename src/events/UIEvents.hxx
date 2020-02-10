@@ -22,4 +22,12 @@ struct ActivitySwitchEvent
  ActivityType activityType;
 };
 
+/**
+ * @brief A change in the window's size
+ */
+struct WindowResizeEvent
+{
+
+};
+
 #endif // UI_EVENTS_HXX

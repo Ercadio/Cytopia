@@ -35,7 +35,7 @@ Game::Game() :
 #endif // USE_AUDIO
   m_MouseController{m_GameContext, m_GlobalModel},
   m_LanguageManager{m_GameContext, m_GlobalModel},
-  m_UILoop(&LoopMain<UILoopMQ, UIVisitor>, std::ref(m_GameContext), UIVisitor{}),
+  m_UILoop(&LoopMain<UILoopMQ, UIVisitor>, std::ref(m_GameContext), UIVisitor{*this}),
   m_EventLoop(&LoopMain<GameLoopMQ, GameVisitor>, std::ref(m_GameContext), GameVisitor{m_GameContext})
 {
 
@@ -48,6 +48,26 @@ Game::Game() :
     {
       case SDL_QUIT:
         return;
+      case SDL_MOUSEMOTION:
+        m_GameLoopMQ.push(MousePositionEvent{event});
+        break;
+      case SDL_MOUSEBUTTONUP: [[fallthrough]];
+      case SDL_MOUSEBUTTONDOWN:
+        m_GameLoopMQ.push(ClickEvent{event});
+        break;
+      case SDL_MOUSEWHEEL:
+        m_GameLoopMQ.push(ScrollEvent{event});
+        break;
+      case SDL_WINDOWEVENT:
+        switch(event.window.event)
+        {
+          case SDL_WINDOWEVENT_SIZE_CHANGED:
+            m_UILoopMQ.push(WindowResizeEvent{});
+            [[fallthrough]];
+          default:
+            break;
+        }
+        break;
       default:
         LOG(LOG_WARNING) << "Uncaught SDL Event happened with id " << event.type;
         break;
@@ -72,7 +92,6 @@ template <typename MQType, typename Visitor> void Game::LoopMain(GameContext &co
   {
     while (true)
     {
-      LOG(LOG_DEBUG) << "Waiting for an event";
       for (auto event : std::get<MQType *>(context)->getEnumerable())
       {
         if (std::holds_alternative<TerminateEvent>(event))
@@ -91,4 +110,28 @@ template <typename MQType, typename Visitor> void Game::LoopMain(GameContext &co
     LOG(LOG_ERROR) << ex.what();
     // @todo: Call shutdown() here in a safe way
   }
+}
+
+Game::UIVisitor::UIVisitor(Window & window) :
+  m_Window(window)
+{
+}
+
+void Game::GameVisitor::operator()(TerminateEvent &&event) { }
+
+void Game::UIVisitor::operator()(TerminateEvent &&event) { }
+
+void Game::GameVisitor::operator()(ActivitySwitchEvent &&event)
+{
+  LOG(LOG_WARNING) << TRACE_INFO "Unimplemented method";
+}
+
+void Game::UIVisitor::operator()(ActivitySwitchEvent &&event)
+{
+  LOG(LOG_WARNING) << TRACE_INFO "Unimplemented method";
+}
+
+void Game::UIVisitor::operator()(WindowResizeEvent &&event)
+{ 
+  m_Window.handleEvent(std::move(event));
 }

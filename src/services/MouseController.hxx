@@ -2,36 +2,35 @@
 #define MOUSE_CONTROLLER_HXX
 
 #include <vector>
+#include <unordered_map>
 
 #include "../GameService.hxx"
 #include "../events/MouseEvents.hxx"
+#include "../events/UIEvents.hxx"
 #include "../GlobalModel.hxx"
 #include "../util/Point.hxx"
+#include "../controller/iMouseHandler.hxx"
 
 class MouseController : public GameService
 {
-
+public:
+  MouseController(GameService::ServiceTuple &, GlobalModel &);
+  ~MouseController();
+  void addHandler(iMouseHandler *);
+private:
   void handleEvent(MousePositionEvent && );
-  
-  void handleEvent(ClickEvent && );
-  
+  void handleEvent(ClickEvent && );  
   void handleEvent(ScrollEvent && );
+  void handleEvent(ActivitySwitchEvent && );
  
   friend class Game; 
 
-  class UIElement *m_lastHoveredElement = nullptr;
-
   GlobalModel & m_GlobalModel;
 
-  Point m_HighlightedNode = {0, 0, 0, 0};
-  std::vector<Point> m_HighlightedNodes;
-  Point m_clickDownCoords = {0, 0, 0, 0};
-
-public:
-
-  MouseController(GameService::ServiceTuple &, GlobalModel &);
-  ~MouseController();
-  
+  using HandlerList = std::vector<iMouseHandler *>;
+  std::unordered_map<SpatialBlock, HandlerList> m_SpatialMap;
+  iMouseHandler * m_LastHovered;
 };
+
 
 #endif // MOUSE_CONTROLLER_HXX

@@ -13,7 +13,8 @@ using std::string;
  */
 using UIEvents = TypeList<
   struct TerminateEvent,
-  struct ActivitySwitchEvent 
+  struct ActivitySwitchEvent,
+  struct WindowResizeEvent
   /* Add UI Events here */
   >;
 

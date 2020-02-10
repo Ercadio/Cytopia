@@ -2,7 +2,7 @@
 #include "../util/LOG.hxx"
 #include "../util/Exception.hxx"
 
-void iLayout::addElement(iWidgetPtr&& pw)
+void iLayout::addElement(iViewElementPtr&& pw)
 {
   m_Elements.emplace_back(std::move(pw));
 }
@@ -26,11 +26,6 @@ const PaddingConfiguration & iLayout::getPadding() const
   return m_PaddingConfiguration;
 }
 
-void iLayout::setup() noexcept
-{
-  computeBoundaries();
-}
-
 void iLayout::draw(iRendererPtr & renderer) const noexcept
 {
   LOG(LOG_DEBUG) << "Drawing a iLayout";
@@ -43,6 +38,20 @@ iLayout::ElementRange iLayout::elements() noexcept
   return ElementRange{*this};
 }
 
+iLayout::iLayout(Rectangle && r) : m_Bounds(r)
+{
+}
+
 iLayout::~iLayout()
 {
+}
+
+const Rectangle & iLayout::getBounds() const noexcept
+{
+  return m_Bounds;
+}
+
+void iLayout::setBounds(Rectangle && r) noexcept 
+{
+  std::swap(r, m_Bounds);
 }

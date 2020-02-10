@@ -4,21 +4,22 @@
 #include <vector>
 
 #include "iView.hxx"
-#include "iWidget.hxx"
+#include "iViewElement.hxx"
 #include "BoxSizing.hxx"
 
-class iLayout : public iView
+class iLayout : public virtual iView
 {
 
-  std::vector<iWidgetPtr> m_Elements;
+  std::vector<iViewElementPtr> m_Elements;
   PaddingConfiguration m_PaddingConfiguration;
+  Rectangle m_Bounds;
 
 public:
   
   class ElementRange
   {
   public:
-    using iterator = std::vector<iWidgetPtr>::iterator;
+    using iterator = std::vector<iViewElementPtr>::iterator;
     ElementRange(iLayout &);
     iterator begin();
     iterator end();
@@ -27,7 +28,6 @@ public:
     iterator m_End;
   };
 
-
   /**
    * @returns the PaddingConfiguration of the iLayout
    * @details the PaddingConfiguration only contains pixel values
@@ -35,18 +35,17 @@ public:
   const PaddingConfiguration & getPadding() const;
 
   virtual void draw(iRendererPtr &) const noexcept final;
-  
-  void setup() noexcept;
 
+  iLayout(Rectangle &&);
   virtual ~iLayout() = 0;
 
 protected:
 
   /**
-   * @brief Adds a iWidget to the iLayout
-   * @param iWidgetPtr the iWidget to add
+   * @brief Adds a iViewElement to the iLayout
+   * @param iViewElementPtr the iViewElement to add
    */
-  void addElement(iWidgetPtr &&);
+  void addElement(iViewElementPtr &&);
 
   /**
    * @brief Sets the PaddingConfiguration of a iLayout
@@ -60,6 +59,10 @@ protected:
    */
   virtual void computeBoundaries() noexcept = 0;
 
+  const Rectangle & getBounds() const noexcept final;
+
+private:
+  void setBounds(Rectangle &&) noexcept final;
 };
 
 #endif // I_LAYOUT_HXX
