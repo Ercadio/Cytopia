@@ -6,21 +6,22 @@
 #include "iMouseHandler.hxx"
 #include "../model/ButtonState.hxx"
 #include "../view/Shape.hxx"
+#include "../view/iView.hxx"
 
 class ButtonHandler : public iMouseHandler
 {
 public:
   using Callback = std::function<void()>;
-  ButtonHandler(Callback callback, ButtonState & state, const iShape & shape);
+  ButtonHandler(Callback callback, ButtonState & state, const iView &);
   ~ButtonHandler() override;
   void onMouseClick(class ClickEvent &&) override;
   void onMouseHover() override;
   void onMouseLeave() override;
-  const iShape & getShape() override;
+  const iShape & getShape() final;
 private:
   ButtonState & m_State;
   Callback m_HandleClick;  
-  const iShape & m_Shape;
+  const iView & m_View;
 };
 
 #endif // BUTTON_CONTROLLER_HXX

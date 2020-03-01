@@ -23,7 +23,7 @@ void Map::setGeneratorType(MapGeneratorType type)
       m_Generator = iGeneratorPtr{new DefaultGenerator};
   }
   std::swap(type, m_GeneratorType);
-  notifyObservers(ChangeNotification{type, m_GeneratorType});
+  notifyObservers(Notification{m_GeneratorType});
 }
 
 void Map::setTileData(TilePosition && position, TileData && data)
@@ -32,7 +32,7 @@ void Map::setTileData(TilePosition && position, TileData && data)
     .at(ChunkPosition(position))
     .at(position);
   std::swap(tile, data);
-  notifyObservers(ChangeNotification{data, tile});
+  notifyObservers(Notification{tile});
 }
 
 

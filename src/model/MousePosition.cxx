@@ -9,5 +9,5 @@ MousePosition::~MousePosition()
 void MousePosition::setPosition(MousePositionModel&& model)
 {
   std::swap(m_Model, model);
-  notifyObservers(ChangeNotification{model, m_Model});
+  notifyObservers(Notification{m_Model});
 }

@@ -16,6 +16,6 @@ private:
   void setBounds(Rectangle &&) noexcept final;
 };
 
-using iViewElementPtr = std::unique_ptr<iViewElement>;
+using iViewElementPtr = std::shared_ptr<iViewElement>;
 
 #endif // I_VIEW_ELEMENT_HXX

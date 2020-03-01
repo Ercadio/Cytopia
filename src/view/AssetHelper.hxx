@@ -5,12 +5,44 @@
 #include <tuple>
 #include <SDL2/SDL_image.h>
 
+#include "Color.hxx"
 #include "Shape.hxx"
 #include "../util/LOG.hxx"
 
 namespace AssetHelper
 {
   void MakeColRepeatImage(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
+  
+  
+  /**
+   * @brief     Expands a sprite to fit a region
+   * @details   Repeats the middle row of pixels in both dimensions
+   *            until the surface fits the destination sprite
+   * @param     from the original sprite
+   * @param     to the destination srpite
+   * @param     rfrom the original dimensions
+   * @param     rto the destination dimensions
+   * @param     corner the dimensions of the corners
+   */
+  void ExpandSprite(uint32_t* from, uint32_t* to, 
+      const Rectangle & rfrom, const Rectangle & rto, const Rectangle & corner);
+  
+  /**
+   * @brief Shifts the hue of magic pixels
+   * @details A magic pixel is one that has an equal red and blue value 
+   *          (typically) purple, white, black, or green
+   * @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB
+   */
+  void CropImage(uint32_t*, const Rectangle &, const Rectangle &);
+
+  /**
+   * @brief This implementation shifts the hue of magic pixels
+   * @details A magic pixel is one that has an equal red and blue value 
+   *          (typically) purple, white, black, or green
+   * @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB
+   */
+  void ColorMagicPixels(uint32_t*, RGBAColor);
+  
   void ResizeNearest(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
   void RepeatXY(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
   template <typename OutputIterator>

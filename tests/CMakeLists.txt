@@ -48,7 +48,6 @@ LIST(APPEND TEST_SOURCES
         Example.cxx
         services/GameClock.cxx
         util/Meta.cxx
-        util/Observer.cxx
         util/MessageQueue.cxx
         util/LOG.cxx
         )

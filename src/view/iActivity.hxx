@@ -8,8 +8,7 @@
 #include "iViewElement.hxx"
 #include "../GameService.hxx"
 #include "../controller/iController.hxx"
-#include "../controller/iMouseHandler.hxx"
-#include "../model/iState.hxx"
+#include "../model/iModel.hxx"
 
 BETTER_ENUM(ActivityType, uint8_t, MainMenu, NewGame, LoadGame);
 
@@ -17,7 +16,7 @@ class iActivity : public GameService, public virtual iView
 {
   class Window & m_Window;
   std::vector<iControllerPtr> m_Controllers;
-  std::vector<iStatePtr> m_States;
+  std::vector<iModelPtr> m_States;
   friend class Window;
 
 public:
@@ -40,6 +39,7 @@ protected:
   template <typename StateType, typename... Args>
   StateType & createState(Args &&... args);
 
+  void bindHandlers() noexcept;
 };
 
 using iActivityPtr = std::unique_ptr<iActivity>;

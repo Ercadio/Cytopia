@@ -18,6 +18,6 @@ public:
   virtual void draw(iRendererPtr &) const noexcept override;
 };
 
-using ImageViewPtr = std::unique_ptr<ImageView>;
+using ImageViewPtr = std::shared_ptr<ImageView>;
 
 #endif // IMAGE_VIEW_HXX_

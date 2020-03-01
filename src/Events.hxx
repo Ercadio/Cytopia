@@ -14,7 +14,9 @@ using std::string;
 using UIEvents = TypeList<
   struct TerminateEvent,
   struct ActivitySwitchEvent,
-  struct WindowResizeEvent
+  struct WindowResizeEvent,
+  struct WindowRedrawEvent,
+  struct UIChangeEvent
   /* Add UI Events here */
   >;
 
@@ -44,10 +46,11 @@ struct TerminateEvent
 {
 };
 
-#endif
-
 #ifdef USE_AUDIO
 #include "events/AudioEvents.hxx"
 #endif // USE_AUDIO
 #include "events/UIEvents.hxx"
 #include "events/MouseEvents.hxx"
+
+#endif
+

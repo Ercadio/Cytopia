@@ -2,9 +2,10 @@
 #include "../util/LOG.hxx"
 #include "../util/Exception.hxx"
 
-void iLayout::addElement(iViewElementPtr&& pw)
+iViewElementPtr iLayout::addElement(iViewElementPtr pw)
 {
-  m_Elements.emplace_back(std::move(pw));
+  m_Elements.emplace_back(pw);
+  return m_Elements.back();
 }
 
 void iLayout::setPadding(PaddingConfiguration && pc) noexcept

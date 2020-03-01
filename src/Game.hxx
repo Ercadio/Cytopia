@@ -78,6 +78,10 @@ private:
     void operator()(ActivitySwitchEvent &&);
 
     void operator()(WindowResizeEvent &&);
+
+    void operator()(WindowRedrawEvent &&);
+    
+    void operator()(UIChangeEvent &&);
   private:
     Window & m_Window;
   };

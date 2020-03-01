@@ -63,7 +63,6 @@ set(SOURCE_FILES
   util/LOG.hxx
   util/LOG.inl.hxx
   util/Meta.hxx
-  util/Model.hxx
   util/Observer.hxx
   util/Point.cxx
   util/Point.hxx
@@ -102,6 +101,8 @@ set(SOURCE_FILES
   view/iViewElement.cxx
   view/SDLRenderer.hxx
   view/SDLRenderer.cxx
+  model/iModel.hxx
+  model/iModel.cxx
   )
 
 list(APPEND _include_directories

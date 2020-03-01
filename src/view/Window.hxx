@@ -17,6 +17,7 @@ class Window
   iActivityPtr m_Activity;
 
   void handleEvent(WindowResizeEvent&&);
+  void handleEvent(WindowRedrawEvent&&);
   friend class Game;  
 public:
   Window(const char * title, unsigned int width, unsigned int height, bool isFullScreen, const string & windowIcon);

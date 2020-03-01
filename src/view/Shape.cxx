@@ -33,7 +33,9 @@ int Rectangle::height() const noexcept
   return m_y2 - m_y1;
 }
 
-std::pair<int, int> Rectangle::position() const noexcept { return {m_x1, m_y1}; }
+std::pair<int, int> Rectangle::p1() const noexcept { return {m_x1, m_y1}; }
+
+std::pair<int, int> Rectangle::p2() const noexcept { return {m_x2, m_y2}; }
 
 std::ostream& operator<<(std::ostream& os, const Rectangle& r)
 {

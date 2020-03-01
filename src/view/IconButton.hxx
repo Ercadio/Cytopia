@@ -13,6 +13,6 @@ public:
   virtual ~IconButton();
 };
 
-using IconButtonPtr = std::unique_ptr<IconButton>;
+using IconButtonPtr = std::shared_ptr<IconButton>;
 
 #endif // ICON_BUTTON_HXX_

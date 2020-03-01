@@ -45,7 +45,7 @@ protected:
    * @brief Adds a iViewElement to the iLayout
    * @param iViewElementPtr the iViewElement to add
    */
-  void addElement(iViewElementPtr &&);
+  iViewElementPtr addElement(iViewElementPtr);
 
   /**
    * @brief Sets the PaddingConfiguration of a iLayout

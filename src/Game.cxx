@@ -16,6 +16,7 @@ template void Game::LoopMain<UILoopMQ, Game::UIVisitor>(Game::GameContext &, Gam
 
 Game::Game() :
   Window(VERSION, 640, 480, false, "resources/images/app_icons/cytopia_icon.png"),
+  m_GlobalModel(MousePosition{m_UILoopMQ}, MapEditor{m_UILoopMQ}, Settings{m_UILoopMQ}),
   m_GameContext(
       &m_UILoopMQ, 
       &m_GameLoopMQ, 
@@ -63,7 +64,10 @@ Game::Game() :
         {
           case SDL_WINDOWEVENT_SIZE_CHANGED:
             m_UILoopMQ.push(WindowResizeEvent{});
-            [[fallthrough]];
+            break;
+          case SDL_WINDOWEVENT_EXPOSED:
+            m_UILoopMQ.push(WindowRedrawEvent{});
+            break;
           default:
             break;
         }
@@ -134,4 +138,14 @@ void Game::UIVisitor::operator()(ActivitySwitchEvent &&event)
 void Game::UIVisitor::operator()(WindowResizeEvent &&event)
 { 
   m_Window.handleEvent(std::move(event));
+}
+
+void Game::UIVisitor::operator()(WindowRedrawEvent &&event)
+{ 
+  m_Window.handleEvent(std::move(event));
+}
+
+void Game::UIVisitor::operator()(UIChangeEvent && change)
+{ 
+  change.apply();
 }

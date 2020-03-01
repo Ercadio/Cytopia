@@ -2,11 +2,11 @@
 #include "../util/ZipRange.hxx"
 #include "../util/LOG.hxx"
 
-void AbsoluteLayout::addElement(iViewElementPtr&& pWid, BoxSizing&& bs, AbsolutePosition&& ap)
+iViewElementPtr AbsoluteLayout::addElement(iViewElementPtr pWid, BoxSizing&& bs, AbsolutePosition&& ap)
 {
-  addElement(std::move(pWid));
   m_Sizes.emplace_back(bs);
   m_Positions.emplace_back(ap);
+  return addElement(pWid);
 }
 
 void AbsoluteLayout::computeBoundaries() noexcept

@@ -1,7 +1,7 @@
 #ifndef MOUSE_POSITION_HXX_
 #define MOUSE_POSITION_HXX_
 
-#include "../util/Model.hxx"
+#include "DataModel.hxx"
 
 struct MousePositionModel
 {
@@ -11,10 +11,13 @@ struct MousePositionModel
   int yVelocity;
 };
 
-class MousePosition : public Model<MousePositionModel>
+using MousePositionNotification = TypeList<MousePositionModel>;
+
+class MousePosition : public DataModel<MousePositionNotification>
 {
   MousePositionModel m_Model;
 public:
+  using DataModel::DataModel;
   void setPosition(MousePositionModel &&);
   ~MousePosition();
 };

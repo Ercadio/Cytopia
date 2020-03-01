@@ -1,17 +1,18 @@
 #include "ButtonHandler.hxx"
+#include "../util/LOG.hxx"
 #include "../events/MouseEvents.hxx"
 
-ButtonHandler::ButtonHandler(Callback callback, ButtonState & state, const iShape & shape) :
+ButtonHandler::ButtonHandler(Callback callback, ButtonState & state, const iView & view) :
   m_HandleClick(callback),
   m_State(state),
-  m_Shape(shape)
+  m_View(view)
 { }
 
 ButtonHandler::~ButtonHandler() = default;
 
 void ButtonHandler::onMouseHover()
 {
-  // setCursor(CursorType::Pointer);
+  setCursor(CursorType::Hand);
   m_State.setStatus(ButtonStatus::Hovered);
 }
 
@@ -28,11 +29,11 @@ void ButtonHandler::onMouseClick(ClickEvent && event)
 
 void ButtonHandler::onMouseLeave()
 {
-  // setCursor(CursorType::Normal);
+  setCursor(CursorType::Arrow);
   m_State.setStatus(ButtonStatus::Normal);
 }
 
 const iShape & ButtonHandler::getShape()
 {
-  return m_Shape;
+  return m_View.getBounds();
 }

@@ -1,7 +1,5 @@
 #include "Color.hxx"
 
-RGBAColor::RGBAColor(uint32_t color) : m_Color(color) { }
-
 SDL_Color RGBAColor::to_SDL() const noexcept
 {
   return SDL_Color{

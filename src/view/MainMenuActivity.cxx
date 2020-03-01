@@ -16,15 +16,15 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
 {
   /* Create background */
   {
-    ImageViewPtr img = std::make_unique<ImageView>("/resources/images/ui/general/background", DisplayMode::RepeatXY);
-    addElement(std::move(img),
+    ImageViewPtr img = std::make_shared<ImageView>("/resources/images/ui/general/background", DisplayMode::RepeatXY);
+    addElement(img,
         BoxSizing{100_lw, 100_lw},
         AbsolutePosition::Origin());
   }
   /* Create logo */
   {
-    ImageViewPtr logo = std::make_unique<ImageView>("/resources/images/app_icons/logo_big_textured", DisplayMode::NearestXY);
-    addElement(std::move(logo),
+    ImageViewPtr logo = std::make_shared<ImageView>("/resources/images/app_icons/logo_big_textured", DisplayMode::NearestXY);
+    addElement(logo,
         BoxSizing{220_px, 50_px},
         AbsolutePosition{25_lh - 50_px, 50_lw - 50_ew});
   }
@@ -33,23 +33,20 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
     auto texts = std::array{"New Game", "Load Game", "Exit"};
     auto topPositions = std::array{40_lh, 55_lh, 70_lh};
     auto callbacks = std::array{
-      &MainMenuActivity::testing,
-      &MainMenuActivity::testing,
-      &MainMenuActivity::testing
-//      std::bind(&MainMenuActivity::onNewGame, this), 
-//      std::bind(&MainMenuActivity::onLoadGame, this),
-//      std::bind(&MainMenuActivity::onExit, this)
+      std::bind(&MainMenuActivity::onNewGame, this), 
+      std::bind(&MainMenuActivity::onLoadGame, this),
+      std::bind(&MainMenuActivity::onExit, this)
     };
     for(auto [text, tp, cb] : ZipRange{texts, topPositions, callbacks})
     {
-      TextButtonPtr button = std::make_unique<TextButton>(text);
+      TextButtonPtr button = std::make_shared<TextButton>(text);
       ButtonState & state = createState<ButtonState>();
-      auto & handler = createController<ButtonHandler>(cb, state, button->getBounds());
-      GetService<MouseController>().addHandler(&handler);
       addElement(
-          std::move(button), 
+          button, 
           BoxSizing{30_lw, 10_lh}, 
           AbsolutePosition{tp, 35_lw});
+      createController<ButtonHandler>(cb, state, *button);
+      state.addObserver(button);
     }
   }
   /* Create all icons */
@@ -60,15 +57,15 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
     {
       std::string iconPath = "resources/images/ui/buttons/";
       iconPath += base_icon;
-      IconButtonPtr button = std::make_unique<IconButton>(iconPath);
+      IconButtonPtr button = std::make_shared<IconButton>(iconPath);
       addElement(
-          std::move(button), 
+          button, 
           BoxSizing{50_px, 50_px}, 
           AbsolutePosition{100_lh - 55_px, lp});
     }
   }
 }
-void MainMenuActivity::onNewGame() { }
+void MainMenuActivity::onNewGame() { LOG(LOG_INFO) << __PRETTY_FUNCTION__; }
 void MainMenuActivity::onLoadGame() { }
 void MainMenuActivity::onExit() { }
 void MainMenuActivity::onLanguageSelection() { }
@@ -79,6 +76,7 @@ MainMenuActivity::~MainMenuActivity() = default;
 void MainMenuActivity::setup() noexcept
 {
   computeBoundaries();
+  bindHandlers();
 }
 
 void MainMenuActivity::testing() { LOG(LOG_INFO) << "HELLO"; };

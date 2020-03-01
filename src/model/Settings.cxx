@@ -6,9 +6,6 @@ bool SettingsModel::getFullscreen() const noexcept { return m_Flags[1]; }
 bool SettingsModel::getMusicAllowed() const noexcept { return m_Flags[2]; }
 bool SettingsModel::getSoundEffectsAllowed() const noexcept { return m_Flags[3]; }
 
-Settings::Settings() : SettingsModel()
-{ }
-
 Settings::~Settings() 
 {
   LOG(LOG_DEBUG) << "Destroying Settings";
@@ -16,9 +13,7 @@ Settings::~Settings()
 
 void Settings::setDesiredScreenWidth(ScreenDimension sd)
 { 
-  SettingsModel sm{*this};
   desiredScreenWidth = sd;
-  notifyObservers(ChangeNotification{sm, static_cast<SettingsModel &>(*this)});
 }
 
 void Settings::setDesiredScreenHeight(ScreenDimension sd)

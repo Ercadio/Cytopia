@@ -11,7 +11,7 @@ struct ChangeNotification
   ChangeNotification(DataRepresentation & before, DataRepresentation & after) : before(before), after(after) { }
 };
 
-template <typename... DataRepresentations> class Model : public Subject<ChangeNotification<DataRepresentations>...>
+template <typename... DataRepresentations> class Model : public Subject<TypeList<ChangeNotification<DataRepresentations>...>>
 {
 };
 

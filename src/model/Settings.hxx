@@ -4,7 +4,7 @@
 #include <betterEnums.hxx>
 #include <bitset>
 
-#include "../util/Model.hxx"
+#include "DataModel.hxx"
 
 BETTER_ENUM(ChannelPlayback, uint8_t, Mono, Stereo, ThreeDimensional);
 
@@ -110,12 +110,14 @@ protected:
 
 };
 
-class Settings : public Model<SettingsModel>, private SettingsModel
+using SettingsNotification = TypeList<SettingsModel>;
+
+class Settings : public DataModel<SettingsNotification>, private SettingsModel
 {
 
 public:
 
-  Settings();
+  using DataModel::DataModel;
   
   ~Settings();
  

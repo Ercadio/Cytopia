@@ -37,11 +37,16 @@ void MouseController::handleEvent(MousePositionEvent && event)
 void MouseController::addHandler(iMouseHandler * handler)
 {
   Rectangle bounds = handler->getShape().getBounds();
-  auto [x1, y1] = bounds.position();
-  auto [x2, y2] = std::array{x1 + bounds.width(), y1 + bounds.height()};
-  for(int i = x1 / SpatialBlock::BlockSize::value; i <= x2 / SpatialBlock::BlockSize::value; ++i)
-    for(int j = y1 / SpatialBlock::BlockSize::value; i <= y2 / SpatialBlock::BlockSize::value; ++i)
+  LOG(LOG_DEBUG) << "Adding a mouse handler for region " << bounds;
+  auto [x1, y1] = bounds.p1();
+  auto [x2, y2] = bounds.p2();
+  constexpr int block = SpatialBlock::BlockSize::value;
+  for(int i = x1 / block; i <= x2 / block; ++i)
+    for(int j = y1 / block; j <= y2 / block; ++j)
+    {
+      LOG(LOG_DEBUG) << "Adding it to region (" << i << ", " << j << ")";
       m_SpatialMap[SpatialBlock{i, j}].push_back(handler);
+    }
 }
 
 void MouseController::handleEvent(ClickEvent && event)

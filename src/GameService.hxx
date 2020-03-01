@@ -51,6 +51,7 @@ protected:
    * @tparam ServiceType the type of the service
    */
   template <typename ServiceType> ServiceType &GetService();
+  ServiceTuple & getGameContext();
 };
 
 #include "GameService.inl.hxx"

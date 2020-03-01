@@ -26,7 +26,8 @@ public:
   SDL_Rect to_SDL() const noexcept;
   int width() const noexcept;
   int height() const noexcept;
-  std::pair<int, int> position() const noexcept;
+  std::pair<int, int> p1() const noexcept;
+  std::pair<int, int> p2() const noexcept;
   friend std::ostream& operator<<(std::ostream&, const Rectangle&);
 };
 

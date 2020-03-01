@@ -4,6 +4,7 @@
 #include "../util/Exception.hxx"
 #include "../util/LOG.hxx"
 #include "Window.hxx"
+#include "../services/MouseController.hxx"
 
 iActivity::iActivity(GameService::ServiceTuple & context, Window & w) : GameService(context), m_Window(w) { }
 
@@ -15,3 +16,13 @@ void iActivity::activitySwitch(ActivityType type)
   GetService<GameLoopMQ>().push(ActivitySwitchEvent{type});
 }
 
+void iActivity::bindHandlers() noexcept
+{
+  for(auto & handlerptr : m_Controllers)
+  {
+    // TODO: Refactor this
+    iMouseHandler* handler = dynamic_cast<iMouseHandler*>(handlerptr.get());
+    if(handler)
+      GetService<MouseController>().addHandler(handler);
+  }
+}

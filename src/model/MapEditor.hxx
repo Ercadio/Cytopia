@@ -2,7 +2,7 @@
 #define MAP_EDITOR_HXX
 
 #include <betterEnums.hxx>
-#include "../util/Model.hxx"
+#include "DataModel.hxx"
 
 BETTER_ENUM(TerrainEditMode, char, Raise, Lower, Level, Demolish, BuildRectangle, None);
 
@@ -13,11 +13,13 @@ struct MapEditorModel
   int highlightColor;
 };
 
-class MapEditor : public Model<MapEditorModel>
+using MapEditorNotification = TypeList<MapEditorModel>;
+
+class MapEditor : public DataModel<MapEditorNotification>
 {
   MapEditorModel m_Model;
 public:
-  MapEditor();
+  using DataModel::DataModel;
   ~MapEditor();
   void setEditMode(TerrainEditMode);
   void setHighlightColor(int);

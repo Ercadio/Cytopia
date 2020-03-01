@@ -3,18 +3,21 @@
 
 #include <betterEnums.hxx>
 
-#include "../util/Model.hxx"
-#include "iState.hxx"
+#include "DataModel.hxx"
 
 BETTER_ENUM(ButtonStatus, uint8_t, Normal, Disabled, Pressed, Hovered);
 
-class ButtonState : public iState
+using ButtonNotifications = TypeList<ButtonStatus>;
+
+class ButtonState : public DataModel<ButtonNotifications>
 {
   ButtonStatus m_Status = ButtonStatus::Normal;
 public:
-  ButtonState();
+  using DataModel::DataModel;
   void setStatus(ButtonStatus);
   ~ButtonState() final;
 };
+
+using ButtonObserver = Observer<ButtonNotifications>;
 
 #endif // BUTTON_STATE_HXX

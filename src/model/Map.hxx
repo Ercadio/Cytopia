@@ -4,13 +4,13 @@
 #include <vector>
 #include <unordered_map>
 #include <betterEnums.hxx>
-#include "../util/Model.hxx"
+#include "DataModel.hxx"
 #include "../util/Meta.hxx"
 #include "../util/Point.hxx"
 #include "../engine/iGenerator.hxx"
+#include "../view/Color.hxx"
 
 using TileType = uint32_t;
-using RGBAColor = StrongType<uint32_t, class RGBAColorTag>;
 
 struct TileData
 {
@@ -27,7 +27,9 @@ struct MapChunk
 
 BETTER_ENUM(MapGeneratorType, uint8_t, Default);
 
-class Map : public Model<MapChunk, MapGeneratorType, TileData>
+using MapNotification = TypeList<MapChunk, MapGeneratorType, TileData>;
+
+class Map : public DataModel<MapNotification>
 {
 
   std::unordered_map<ChunkPosition, MapChunk> m_Chunks;

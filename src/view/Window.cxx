@@ -58,3 +58,10 @@ void Window::handleEvent(WindowResizeEvent &&event)
   m_Activity->draw(m_Renderer);
   m_Renderer->commit();
 }
+
+void Window::handleEvent(WindowRedrawEvent &&event)
+{
+  m_Renderer->clear();
+  m_Activity->draw(m_Renderer);
+  m_Renderer->commit();
+}
