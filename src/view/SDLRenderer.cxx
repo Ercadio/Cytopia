@@ -4,8 +4,8 @@
 
 SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
 {
-  m_Renderer = SDL_CreateRenderer(sdl_window, -1, SDL_RENDERER_ACCELERATED);
-
+  m_Renderer = SDL_CreateRenderer(sdl_window, -1, 0);
+  
   if (!m_Renderer)
     throw UIError(TRACE_INFO "Failed to create Renderer: " + string{SDL_GetError()});
 

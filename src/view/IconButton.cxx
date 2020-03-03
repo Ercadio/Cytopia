@@ -20,7 +20,7 @@ void IconButton::draw(iRendererPtr & renderer) const noexcept
   AssetHelper::ResizeNearest(
       sprite.data(), 
       pixels.data(), 
-      Rectangle{0, 0, swidth, sheight},
+      Rectangle{0, 0, swidth-1, sheight-1},
       rect);
   renderer->drawPicture(rect, pixels.data());
 }

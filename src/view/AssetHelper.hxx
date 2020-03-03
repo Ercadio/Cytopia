@@ -33,7 +33,7 @@ namespace AssetHelper
    *          (typically) purple, white, black, or green
    * @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB
    */
-  void CropImage(uint32_t*, const Rectangle &, const Rectangle &);
+  size_t CropImage(uint32_t* from, uint32_t* to, const Rectangle & rfrom, Rectangle & rto);
 
   /**
    * @brief This implementation shifts the hue of magic pixels
@@ -41,7 +41,8 @@ namespace AssetHelper
    *          (typically) purple, white, black, or green
    * @see https://en.wikipedia.org/wiki/HSL_and_HSV#HSL_to_RGB
    */
-  void ColorMagicPixels(uint32_t*, RGBAColor);
+  template <typename Iterator>
+  void ColorMagicPixels(Iterator begin, Iterator end, const RGBAColor& color);
   
   void ResizeNearest(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
   void RepeatXY(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
@@ -50,5 +51,4 @@ namespace AssetHelper
 };
 
 #include "AssetHelper.inl.hxx"
-
 #endif // ASSET_HELPER_HXX_

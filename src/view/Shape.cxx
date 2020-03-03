@@ -25,12 +25,12 @@ SDL_Rect Rectangle::to_SDL() const noexcept
 
 int Rectangle::width() const noexcept
 {
-  return m_x2 - m_x1;
+  return m_x2 - m_x1 + 1;
 }
 
 int Rectangle::height() const noexcept
 {
-  return m_y2 - m_y1;
+  return m_y2 - m_y1 + 1;
 }
 
 std::pair<int, int> Rectangle::p1() const noexcept { return {m_x1, m_y1}; }

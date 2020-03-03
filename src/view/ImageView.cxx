@@ -21,14 +21,14 @@ void ImageView::draw(iRendererPtr & renderer) const noexcept
       AssetHelper::ResizeNearest(
           sprite.data(), 
           pixels.data(), 
-          Rectangle{0, 0, swidth, sheight},
+          Rectangle{0, 0, swidth-1, sheight-1},
           rect);
       break;
     case DisplayMode::RepeatXY:
       AssetHelper::RepeatXY(
           sprite.data(), 
           pixels.data(), 
-          Rectangle{0, 0, swidth, sheight},
+          Rectangle{0, 0, swidth-1, sheight-1},
           rect);
       break;
   }

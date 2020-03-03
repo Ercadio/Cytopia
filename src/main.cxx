@@ -30,7 +30,7 @@ void protected_main(CLIContext & cliContext)
 
   LOG(LOG_DEBUG) << "Initializing SDL subsystems";
 
-  if (SDL_Init(SDL_INIT_VIDEO) != 0)
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0)
   {
     LOG(LOG_ERROR) << "Failed to Init SDL";
     LOG(LOG_ERROR) << "SDL Error: " << SDL_GetError();
