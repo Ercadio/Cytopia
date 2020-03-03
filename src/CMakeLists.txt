@@ -68,6 +68,7 @@ set(SOURCE_FILES
   util/Point.hxx
   util/Singleton.hxx
   util/filesystem.hxx
+  util/filesystem.cxx
   view/AbsoluteLayout.hxx
   view/AbsoluteLayout.cxx
   view/AssetHelper.hxx

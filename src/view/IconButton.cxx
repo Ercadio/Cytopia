@@ -3,8 +3,9 @@
 #include "IconButton.hxx"
 #include "../util/LOG.hxx"
 #include "AssetHelper.hxx"
+#include "../util/filesystem.hxx"
 
-IconButton::IconButton(const std::string & icon) : m_IconPath(SDL_GetBasePath() + icon + ".png")
+IconButton::IconButton(const std::string & icon) : m_IconPath(getBasePath() + icon + ".png")
 {
 }
 

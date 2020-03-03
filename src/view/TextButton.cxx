@@ -2,6 +2,7 @@
 
 #include "TextButton.hxx"
 #include "../util/LOG.hxx"
+#include "../util/filesystem.hxx"
 #include "AssetHelper.hxx"
 
 TextButton::TextButton(const char * text, RGBAColor color) :
@@ -16,7 +17,7 @@ TextButton::~TextButton() { }
 void TextButton::draw(iRendererPtr & renderer) const noexcept
 {
   LOG(LOG_DEBUG) << "Drawing a button widget";
-  std::string fimage = SDL_GetBasePath();
+  std::string fimage = getBasePath();
   fimage += "resources/images/ui/buttons/button.png";
 
   /* First, we load the sprite */

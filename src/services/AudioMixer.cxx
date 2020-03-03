@@ -6,6 +6,7 @@
 #include "../services/GameClock.hxx"
 #include "../services/Randomizer.hxx"
 #include "../engine/MessageQueue.hxx"
+#include "../util/filesystem.hxx"
 
 #include <fstream>
 
@@ -19,7 +20,7 @@ std::function<void(int)> AudioMixer::onTrackFinishedFunc;
 AudioMixer::AudioMixer(GameService::ServiceTuple &context, GlobalModel & model) : 
   GameService(context), m_GlobalModel(model)
 {
-  string fName = SDL_GetBasePath();
+  string fName = getBasePath();
   fName += Settings::AudioConfigJSONFile;
   ifstream ifs(fName);
   if (!ifs)

@@ -1,9 +1,10 @@
 #include "ImageView.hxx"
 #include "AssetHelper.hxx"
+#include "../util/filesystem.hxx"
 #include <vector>
 
 ImageView::ImageView(std::string && image, DisplayMode mode) : 
-  m_ImagePath(SDL_GetBasePath() + image + ".png"),
+  m_ImagePath(getBasePath() + image + ".png"),
   m_DisplayMode(mode)
 { }
 

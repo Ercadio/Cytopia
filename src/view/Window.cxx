@@ -1,6 +1,7 @@
 #include "Window.hxx"
 #include "SDLRenderer.hxx"
 #include "../util/LOG.hxx"
+#include "../util/filesystem.hxx"
 #include <SDL_image.h>
 
 using namespace std::chrono_literals;
@@ -17,7 +18,7 @@ Window::Window(const char * title, unsigned int width, unsigned int height, bool
     throw UIError(TRACE_INFO "Failed to create window: " + string{SDL_GetError()});
 
   m_Renderer = std::make_unique<SDLRenderer>(m_Window);
-  string iconFName = SDL_GetBasePath() + windowIcon;
+  string iconFName = getBasePath() + windowIcon;
   SDL_Surface *icon = IMG_Load(iconFName.c_str());
 
   if (!icon)
@@ -30,7 +31,9 @@ Window::Window(const char * title, unsigned int width, unsigned int height, bool
 Window::~Window()
 {
   /* This will destroy the renderer first (required for SDLRenderer) */
+  LOG(LOG_WARNING) << "Destroying renderer...";
   m_Renderer = nullptr;
+  LOG(LOG_WARNING) << "Destroying window...";
   SDL_DestroyWindow(m_Window);
 }
 

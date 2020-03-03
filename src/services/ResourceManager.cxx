@@ -7,6 +7,7 @@
 
 #include "ResourceManager.hxx"
 #include "../util/Exception.hxx"
+#include "../util/filesystem.hxx"
 #include "../util/LOG.hxx"
 #include "../model/Settings.hxx"
 #include "../GlobalModel.hxx"
@@ -21,7 +22,7 @@ ResourceManager::ResourceManager(GameService::ServiceTuple &services, GlobalMode
   m_CacheSize(0)
 {
 #ifdef USE_AUDIO
-  string fName = SDL_GetBasePath();
+  string fName = getBasePath();
   fName += Settings::AudioConfigJSONFile;
   ifstream ifs(fName);
   if (!ifs)
@@ -59,11 +60,11 @@ void ResourceManager::fetch(SoundtrackID id)
   switch(std::get<Settings>(m_GlobalModel).getPlayback())
   {
     case ChannelPlayback::Stereo:
-      filepath = SDL_GetBasePath() + config->stereoFilePath;
+      filepath = getBasePath() + config->stereoFilePath;
       break;
     case ChannelPlayback::Mono: [[fallthrough]];
     case ChannelPlayback::ThreeDimensional:
-      filepath = SDL_GetBasePath() + config->monoFilePath;
+      filepath = getBasePath() + config->monoFilePath;
       break;
   }
   LOG(LOG_INFO) << "Fetching " << id.get() << " at " << filepath;

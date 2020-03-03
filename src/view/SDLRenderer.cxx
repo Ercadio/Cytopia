@@ -1,6 +1,7 @@
 #include "SDLRenderer.hxx"
 #include "../util/Exception.hxx"
 #include "../util/LOG.hxx"
+#include "../util/filesystem.hxx"
 
 SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
 {
@@ -12,7 +13,7 @@ SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
   if(SDL_SetRenderDrawBlendMode(m_Renderer, SDL_BLENDMODE_BLEND) != 0)
     throw CytopiaError{TRACE_INFO "Failed to enable Alpha" + string{SDL_GetError()}};
 
-  std::string font = SDL_GetBasePath();
+  std::string font = getBasePath();
   font += "resources/fonts/arcadeclassics.ttf";
   m_Font = TTF_OpenFont(font.c_str(), 24);
   if(!m_Font)
@@ -26,8 +27,11 @@ SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
 
 SDLRenderer::~SDLRenderer()
 {
+  SDL_RenderClear(m_Renderer);
   TTF_CloseFont(m_Font);
-  SDL_DestroyRenderer(m_Renderer);
+  LOG(LOG_WARNING) << "Destroying my renderer...";
+  //SDL_DestroyRenderer(m_Renderer);
+  LOG(LOG_WARNING) << "Done";
 }
 
 void SDLRenderer::drawText(

@@ -2,11 +2,12 @@
 
 #include "LanguageManager.hxx"
 #include "../util/LOG.hxx"
+#include "../util/filesystem.hxx"
 
 LanguageManager::LanguageManager(GameService::ServiceTuple & context, GlobalModel & model) : 
   GameService(context), m_GlobalModel(model)
 {
-  std::string moFilePath = SDL_GetBasePath();
+  std::string moFilePath = getBasePath();
   moFilePath += "languages/";
   moFilePath += std::get<Settings>(m_GlobalModel).getGameLanguage();
   moFilePath += "Cytopia.mo";
