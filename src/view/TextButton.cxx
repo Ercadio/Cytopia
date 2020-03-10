@@ -33,8 +33,9 @@ void TextButton::draw(iRendererPtr & renderer) const noexcept
 
   /* Next, we want to display a specific part depending on the state of our button.
    * So we crop that region */
-  
-  Rectangle spriteRect{m_At * swidth / 3, 0, (m_At + 1) * swidth / 3, sheight};
+
+  swidth = swidth/3;
+  Rectangle spriteRect{m_At * swidth, 0, (m_At + 1) * swidth - 1, sheight};
   
   size_t size = AssetHelper::CropImage(
       sprite.data(),
@@ -49,14 +50,19 @@ void TextButton::draw(iRendererPtr & renderer) const noexcept
 
   /* Next, we expand the center of the sprite */
   rect = getBounds();
-  std::vector<uint32_t> pixels(rect.width() * rect.height(), 0x8742f555);
-  AssetHelper::ExpandSprite(sprite.data(), pixels.data(), 
+  auto mind = std::min(rect.width(), rect.height());
+  std::vector<uint32_t> pixels(rect.width() * rect.height(), 0x0);
+  AssetHelper::NNExpandSprite(sprite.data(), pixels.data(), 
       spriteRect, rect, 
-      Rectangle{0, 0, rect.width() / 40, rect.width() / 20});
+      Rectangle{0, 0, mind / 8, mind / 4});
   
   /* Finally, we draw the picture & text */
-  renderer->drawPicture(getBounds(), pixels.data());
-  renderer->drawText(m_Text, RGBAColor{0xFFFFFFFF}, getBounds(), PositionType::Centered);
+  renderer->drawPicture(rect, pixels.data());
+  if(m_At == 2)
+  {
+    rect.translateY(5);
+  }
+  renderer->drawText(m_Text, RGBAColor{0xFFFFFFFF}, rect, PositionType::Centered);
 }
 
 void TextButton::update(Notification notif) noexcept

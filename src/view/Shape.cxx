@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Shape.hxx"
+#include "../util/LOG.hxx"
 
 Rectangle::Rectangle(int x1, int y1, int x2, int y2) :
   m_x1(x1),
@@ -36,6 +37,32 @@ int Rectangle::height() const noexcept
 std::pair<int, int> Rectangle::p1() const noexcept { return {m_x1, m_y1}; }
 
 std::pair<int, int> Rectangle::p2() const noexcept { return {m_x2, m_y2}; }
+  
+void Rectangle::translateX(int x)
+{
+  m_x1 += x;
+  m_x2 += x;
+}
+
+void Rectangle::translateY(int y)
+{
+  m_y1 += y;
+  m_y2 += y;
+}
+
+Rectangle Rectangle::RescaleCenter(const Rectangle & rect, uint32_t zoom)
+{
+  LOG(LOG_DEBUG) << "BEFORE => " << rect;
+  auto [p1x, p1y] = rect.p1();
+  auto [p2x, p2y] = rect.p2();
+  int avgx = (p1x + p2x) / 2;
+  int avgy = (p1y + p2y) / 2;
+  p1x = avgx - (((avgx - p1x) * zoom) >> 16);
+  p2x = (((p2x - avgx) * zoom) >> 16) + avgx;
+  p1y = avgy - (((avgy - p1y) * zoom) >> 16);
+  p2y = (((p2y - avgy) * zoom) >> 16) + avgy;
+  return Rectangle{p1x, p1y, p2x, p2y};
+}
 
 std::ostream& operator<<(std::ostream& os, const Rectangle& r)
 {

@@ -61,7 +61,7 @@ void AssetHelper::RepeatXY(uint32_t* orig, uint32_t* dest, const Rectangle & ori
   }
 }
 
-void AssetHelper::ExpandSprite(uint32_t* from, uint32_t* to, 
+void AssetHelper::NNExpandSprite(uint32_t* from, uint32_t* to, 
     const Rectangle & rfrom, const Rectangle & rto, const Rectangle & corner)
 {
   uint32_t ow = rfrom.width();
@@ -74,10 +74,18 @@ void AssetHelper::ExpandSprite(uint32_t* from, uint32_t* to,
   if(dw * dh == 0)
     return;
 
-  uint32_t x_ratio = ow << 16;
-  x_ratio /= cw * 2;
-  uint32_t y_ratio = oh << 16;
-  y_ratio /= 2 * ch;
+  uint32_t x_ratio = cw << 17;
+  x_ratio /= ow;
+  uint32_t y_ratio = ch << 17;
+  y_ratio /= oh;
+
+  Rectangle scaleTo {
+    0, 0, 
+    static_cast<int>((ow * x_ratio) >> 16),
+    static_cast<int>((oh * y_ratio) >> 16)
+  };
+  std::vector<uint32_t> rescaled(scaleTo.width() * scaleTo.height(), 0x0);
+  AssetHelper::ResizeNearest(from, rescaled.data(), rfrom, scaleTo);
 
   uint32_t min_x = cw;
   uint32_t max_x = dw - min_x;
@@ -88,39 +96,21 @@ void AssetHelper::ExpandSprite(uint32_t* from, uint32_t* to,
   {
     uint32_t x = i % dw;
     uint32_t y = i / dw;
-    if(x < min_x)
-    {
-      x *= x_ratio;
-      x >>= 16;
-    }
-    else if(x >= min_x && x <= max_x)
-    {
-      x = ow / 2;
-    }
-    else
+    if(x >= min_x && x <= max_x)
+      x = scaleTo.width() / 2;
+    else if(x > max_x)
     {
       x -= max_x;
-      x *= x_ratio;
-      x >>= 16;
-      x += ow/2;
+      x += scaleTo.width()/2;
     }
-    if(y < min_y) 
-    {
-      y *= y_ratio;
-      y >>= 16;
-    }
-    else if(y >= min_y && y <= max_y)
-    {
-      y = oh / 2;
-    }
-    else
+    if(y >= min_y && y <= max_y)
+      y = scaleTo.height() / 2;
+    else if(y > max_y)
     {
       y -= max_y;
-      y *= y_ratio;
-      y >>= 16;
-      y += oh/2;
+      y += scaleTo.height()/2;
     }
-    to[i] = from[x + y * ow];
+    to[i] = rescaled[x + y * scaleTo.width()];
   }
 }
 

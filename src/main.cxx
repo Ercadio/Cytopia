@@ -48,6 +48,10 @@ void protected_main(CLIContext & cliContext)
 
   Game game;
 
+  TTF_Quit();
+
+  SDL_Quit();
+
 }
 
 /* @brief All allowed command-line parameters */

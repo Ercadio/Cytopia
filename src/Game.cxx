@@ -82,6 +82,9 @@ Game::Game() :
 
 Game::~Game()
 {
+  const char * error = SDL_GetError();
+  if(*error)
+    LOG(LOG_ERROR) << "SDL Error: " << error;
   LOG(LOG_DEBUG) << "Destroying Game Object";
   m_UILoopMQ.push(TerminateEvent{});
   m_GameLoopMQ.push(TerminateEvent{});
@@ -148,4 +151,5 @@ void Game::UIVisitor::operator()(WindowRedrawEvent &&event)
 void Game::UIVisitor::operator()(UIChangeEvent && change)
 { 
   change.apply();
+  m_Window.handleEvent(WindowRedrawEvent{});
 }

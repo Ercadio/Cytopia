@@ -28,7 +28,10 @@ public:
   int height() const noexcept;
   std::pair<int, int> p1() const noexcept;
   std::pair<int, int> p2() const noexcept;
+  void translateX(int x);
+  void translateY(int y);
   friend std::ostream& operator<<(std::ostream&, const Rectangle&);
+  static Rectangle RescaleCenter(const Rectangle &, uint32_t zoom);
 };
 
 #endif // I_SHAPE_HXX

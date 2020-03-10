@@ -22,7 +22,7 @@ void ButtonHandler::onMouseClick(ClickEvent && event)
     m_State.setStatus(ButtonStatus::Pressed);
   if(event.state & ClickEvent::Released && event.state & ClickEvent::Left)
   {
-    m_State.setStatus(ButtonStatus::Normal);
+    m_State.setStatus(ButtonStatus::Hovered);
     m_HandleClick();
   }
 }

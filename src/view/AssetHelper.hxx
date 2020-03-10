@@ -24,7 +24,7 @@ namespace AssetHelper
    * @param     rto the destination dimensions
    * @param     corner the dimensions of the corners
    */
-  void ExpandSprite(uint32_t* from, uint32_t* to, 
+  void NNExpandSprite(uint32_t* from, uint32_t* to, 
       const Rectangle & rfrom, const Rectangle & rto, const Rectangle & corner);
   
   /**

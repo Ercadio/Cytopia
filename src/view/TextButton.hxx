@@ -11,7 +11,7 @@ class TextButton : public iViewElement, public ButtonObserver
   RGBAColor m_Color;
   const char * m_Text;
 public:
-  TextButton(const char *, RGBAColor = Palette::Orange);
+  TextButton(const char *, RGBAColor = Palette::Gray);
   virtual void draw(iRendererPtr &) const noexcept override;
   virtual ~TextButton();
   using MyController = class ButtonHandler;

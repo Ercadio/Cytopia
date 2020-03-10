@@ -13,7 +13,7 @@ Window::Window(const char * title, unsigned int width, unsigned int height, bool
       SDL_WINDOWPOS_CENTERED, 
       width, height, 
       (isFullScreen ? SDL_WINDOW_FULLSCREEN : 0) |
-      SDL_WINDOW_RESIZABLE);
+      SDL_WINDOW_RESIZABLE | SDL_WINDOW_INPUT_GRABBED);
   if (!m_Window)
     throw UIError(TRACE_INFO "Failed to create window: " + string{SDL_GetError()});
 

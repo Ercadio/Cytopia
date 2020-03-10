@@ -5,14 +5,14 @@
 
 SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
 {
-  m_Renderer = SDL_CreateRenderer(sdl_window, -1, 0);
+  m_Renderer = SDL_CreateRenderer(sdl_window, -1, SDL_RENDERER_ACCELERATED);
   
   if (!m_Renderer)
     throw UIError(TRACE_INFO "Failed to create Renderer: " + string{SDL_GetError()});
 
   if(SDL_SetRenderDrawBlendMode(m_Renderer, SDL_BLENDMODE_BLEND) != 0)
     throw CytopiaError{TRACE_INFO "Failed to enable Alpha" + string{SDL_GetError()}};
-
+  
   std::string font = getBasePath();
   font += "resources/fonts/arcadeclassics.ttf";
   m_Font = TTF_OpenFont(font.c_str(), 24);
@@ -23,12 +23,24 @@ SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
   if(SDL_RenderClear(m_Renderer) != 0)
     throw CytopiaError{TRACE_INFO "Failed to clear canvas" + string{SDL_GetError()}};
   SDL_RenderPresent(m_Renderer);
+  
+  const char * error = SDL_GetError();
+  if(*error)
+  {
+    LOG(LOG_ERROR) << TRACE_INFO "SDL Error: " << error;
+    SDL_ClearError();
+  }
 }
 
 SDLRenderer::~SDLRenderer()
 {
+  const char * error = SDL_GetError();
+  if(*error)
+    LOG(LOG_ERROR) << "SDL Error: " << error;
+
   SDL_RenderClear(m_Renderer);
-  TTF_CloseFont(m_Font);
+  //if(m_Font != nullptr)
+  // TTF_CloseFont(m_Font);
   LOG(LOG_WARNING) << "Destroying my renderer...";
   //SDL_DestroyRenderer(m_Renderer);
   LOG(LOG_WARNING) << "Done";
@@ -106,9 +118,17 @@ Rectangle SDLRenderer::getDrawableSize() const noexcept
 void SDLRenderer::commit()
 {
   SDL_RenderPresent(m_Renderer);
+  const char * error = SDL_GetError();
+  if(*error)
+    LOG(LOG_ERROR) << "SDL Error: " << error;
+
 }
 
 void SDLRenderer::clear()
 {
   SDL_RenderClear(m_Renderer);
+  const char * error = SDL_GetError();
+  if(*error)
+    LOG(LOG_ERROR) << "SDL Error: " << error;
+
 }

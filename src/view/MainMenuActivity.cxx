@@ -51,17 +51,24 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
   }
   /* Create all icons */
   {
+    auto callbacks = std::array{
+      std::bind(&MainMenuActivity::onNewGame, this), 
+      std::bind(&MainMenuActivity::onNewGame, this)
+    };
     auto icons = std::array{"globe", "wrench"};
     auto positions = std::array{100_lw - 110_px, 100_lw - 55_px};
-    for(auto [base_icon, lp] : ZipRange{icons, positions})
+    for(auto [base_icon, lp, cb] : ZipRange{icons, positions, callbacks})
     {
       std::string iconPath = "resources/images/ui/buttons/";
       iconPath += base_icon;
       IconButtonPtr button = std::make_shared<IconButton>(iconPath);
+      ButtonState & state = createState<ButtonState>();
       addElement(
           button, 
           BoxSizing{50_px, 50_px}, 
           AbsolutePosition{100_lh - 55_px, lp});
+      createController<ButtonHandler>(cb, state, *button);
+      state.addObserver(button);
     }
   }
 }
