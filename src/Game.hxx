@@ -72,7 +72,7 @@ private:
 
   struct UIVisitor
   {
-    UIVisitor(Window &);
+    UIVisitor(Window &, GameContext &);
     void operator()(TerminateEvent &&event);
 
     void operator()(ActivitySwitchEvent &&);
@@ -84,6 +84,7 @@ private:
     void operator()(UIChangeEvent &&);
   private:
     Window & m_Window;
+    GameContext & m_GameContext;
   };
 
   struct GameVisitor : public GameService

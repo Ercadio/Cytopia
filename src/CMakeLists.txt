@@ -80,8 +80,16 @@ set(SOURCE_FILES
   view/Color.cxx
   view/TextButton.cxx
   view/TextButton.hxx
-  view/MainMenuActivity.cxx
-  view/MainMenuActivity.hxx
+  activity/MainMenuActivity.cxx
+  activity/MainMenuActivity.hxx
+  activity/NewGameActivity.cxx
+  activity/NewGameActivity.hxx
+  activity/LoadGameActivity.cxx
+  activity/LoadGameActivity.hxx
+  activity/LanguageSelectionActivity.cxx
+  activity/LanguageSelectionActivity.hxx
+  activity/PluginSelectionActivity.cxx
+  activity/PluginSelectionActivity.hxx
   view/IconButton.hxx
   view/IconButton.cxx
   view/ImageView.hxx

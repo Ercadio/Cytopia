@@ -18,6 +18,9 @@ class Window
 
   void handleEvent(WindowResizeEvent&&);
   void handleEvent(WindowRedrawEvent&&);
+
+  template <typename... Args>
+  iActivityPtr fromActivityType(ActivityType, Args&&...);
   friend class Game;  
 public:
   Window(const char * title, unsigned int width, unsigned int height, bool isFullScreen, const string & windowIcon);
@@ -25,5 +28,7 @@ public:
   void setActivity(iActivityPtr);
   Rectangle getBounds() const noexcept;
 };
+
+#include "Window.inl.hxx"
 
 #endif // WINDOW_HXX_

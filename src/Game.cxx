@@ -36,7 +36,7 @@ Game::Game() :
 #endif // USE_AUDIO
   m_MouseController{m_GameContext, m_GlobalModel},
   m_LanguageManager{m_GameContext, m_GlobalModel},
-  m_UILoop(&LoopMain<UILoopMQ, UIVisitor>, std::ref(m_GameContext), UIVisitor{*this}),
+  m_UILoop(&LoopMain<UILoopMQ, UIVisitor>, std::ref(m_GameContext), UIVisitor{*this, m_GameContext}),
   m_EventLoop(&LoopMain<GameLoopMQ, GameVisitor>, std::ref(m_GameContext), GameVisitor{m_GameContext})
 {
 
@@ -119,8 +119,8 @@ template <typename MQType, typename Visitor> void Game::LoopMain(GameContext &co
   }
 }
 
-Game::UIVisitor::UIVisitor(Window & window) :
-  m_Window(window)
+Game::UIVisitor::UIVisitor(Window & window, GameContext & context) :
+  m_Window(window), m_GameContext(context)
 {
 }
 
@@ -130,12 +130,12 @@ void Game::UIVisitor::operator()(TerminateEvent &&event) { }
 
 void Game::GameVisitor::operator()(ActivitySwitchEvent &&event)
 {
-  LOG(LOG_WARNING) << TRACE_INFO "Unimplemented method";
+  GetService<MouseController>().handleEvent(std::move(event));
 }
 
 void Game::UIVisitor::operator()(ActivitySwitchEvent &&event)
 {
-  LOG(LOG_WARNING) << TRACE_INFO "Unimplemented method";
+  m_Window.setActivity(m_Window.fromActivityType(event.activityType, m_GameContext, m_Window));
 }
 
 void Game::UIVisitor::operator()(WindowResizeEvent &&event)

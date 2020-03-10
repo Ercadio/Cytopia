@@ -1,9 +1,9 @@
 #include "MainMenuActivity.hxx"
-#include "TextButton.hxx"
-#include "IconButton.hxx"
-#include "ImageView.hxx"
-#include "BoxSizing.hxx"
-#include "Window.hxx"
+#include "../view/TextButton.hxx"
+#include "../view/IconButton.hxx"
+#include "../view/ImageView.hxx"
+#include "../view/BoxSizing.hxx"
+#include "../view/Window.hxx"
 #include "../controller/ButtonHandler.hxx"
 #include "../util/LOG.hxx"
 #include "../util/Exception.hxx"
@@ -85,5 +85,3 @@ void MainMenuActivity::setup() noexcept
   computeBoundaries();
   bindHandlers();
 }
-
-void MainMenuActivity::testing() { LOG(LOG_INFO) << "HELLO"; };

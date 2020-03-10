@@ -10,7 +10,14 @@
 #include "../controller/iController.hxx"
 #include "../model/iModel.hxx"
 
-BETTER_ENUM(ActivityType, uint8_t, MainMenu, NewGame, LoadGame);
+BETTER_ENUM(ActivityType, uint8_t, MainMenu, NewGame, LoadGame, LanguageSelection, PluginSelection);
+using ActivityImplementations = TypeList<
+  class MainMenuActivity,
+  class NewGameActivity,
+  class LoadGameActivity,
+  class LanguageSelectionActivity,
+  class PluginSelectionActivity
+>;
 
 class iActivity : public GameService, public virtual iView
 {
@@ -24,7 +31,6 @@ public:
   iActivity(GameService::ServiceTuple &, class Window &);
   virtual ~iActivity() = 0;
   virtual void setup() noexcept = 0;
-
 protected:
 
   /**

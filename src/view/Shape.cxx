@@ -52,7 +52,6 @@ void Rectangle::translateY(int y)
 
 Rectangle Rectangle::RescaleCenter(const Rectangle & rect, uint32_t zoom)
 {
-  LOG(LOG_DEBUG) << "BEFORE => " << rect;
   auto [p1x, p1y] = rect.p1();
   auto [p2x, p2y] = rect.p2();
   int avgx = (p1x + p2x) / 2;

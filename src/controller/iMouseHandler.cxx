@@ -26,5 +26,4 @@ void iMouseHandler::setCursor(CursorType type)
   SDL_Cursor* cursor = SDL_CreateSystemCursor(id);
   LOG(LOG_DEBUG) << "Setting cursor";
   SDL_SetCursor(cursor);
-  //SDL_FreeCursor(cursor);
 }
