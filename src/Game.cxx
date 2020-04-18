@@ -3,7 +3,7 @@
 #include <SDL_ttf.h>
 #include "Game.hxx"
 #include "LOG.hxx"
-#include "view/MainMenuActivity.hxx"
+#include "activity/MainMenuActivity.hxx"
 #ifdef USE_ANGELSCRIPT
 #include "Scripting/ScriptEngine.hxx"
 #endif
@@ -15,8 +15,8 @@ template void Game::LoopMain<GameLoopMQ, Game::GameVisitor>(Game::GameContext &,
 template void Game::LoopMain<UILoopMQ, Game::UIVisitor>(Game::GameContext &, Game::UIVisitor);
 
 Game::Game() :
-  Window(VERSION, 640, 480, false, "resources/images/app_icons/cytopia_icon.png"),
-  m_GlobalModel(MousePosition{m_UILoopMQ}, MapEditor{m_UILoopMQ}, Settings{m_UILoopMQ}),
+  Window(VERSION, 640, 480, false, "resources/images/app_icons/cytopia_icon.png", m_GlobalModel),
+  m_GlobalModel(MouseState{m_UILoopMQ}, MapEditor{m_UILoopMQ}, Settings{m_UILoopMQ}),
   m_GameContext(
       &m_UILoopMQ, 
       &m_GameLoopMQ, 

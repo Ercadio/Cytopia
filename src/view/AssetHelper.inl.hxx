@@ -1,6 +1,6 @@
 
 template <typename OutputIterator>
-std::pair<int, int> AssetHelper::LoadImagePixels(const std::string & filepath, OutputIterator it)
+std::pair<int, int> AssetHelper::LoadImagePixels(const std::string & filepath, OutputIterator && it)
 {
   auto surface = IMG_Load(filepath.c_str());
   if(!surface)
@@ -8,9 +8,11 @@ std::pair<int, int> AssetHelper::LoadImagePixels(const std::string & filepath, O
     LOG(LOG_WARNING) << TRACE_INFO "Couldn't load image pixels: " << IMG_GetError();
     return {0, 0};
   }
+  auto w = surface->w, h = surface->h;
+  SDL_LockSurface(surface);
   auto format = surface->format;
-  auto pixels = static_cast<uint32_t*>(surface->pixels);
-  for(uint32_t i = 0; i < surface->w * surface->h; ++i)
+  uint32_t* pixels = static_cast<uint32_t*>(surface->pixels);
+  for(std::size_t i = 0; i < w * h; ++i)
   {
     *it++ = 
       (pixels[i] & format->Rmask) >> format->Rshift << 24 |
@@ -18,8 +20,7 @@ std::pair<int, int> AssetHelper::LoadImagePixels(const std::string & filepath, O
       (pixels[i] & format->Bmask) >> format->Bshift << 8  |
       (pixels[i] & format->Amask) >> format->Ashift << 0;
   }
-  int w = surface->w, h = surface->h;
-  SDL_FreeSurface(surface);
+  SDL_UnlockSurface(surface);
   return {w, h};
 }
 

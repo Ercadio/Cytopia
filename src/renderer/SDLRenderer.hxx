@@ -10,7 +10,6 @@ class SDLRenderer final : public iRenderer
 {
   SDL_Renderer * m_Renderer;
   TTF_Font * m_Font;
-  std::vector<SDL_Texture*> m_Textures;
 public:
   SDLRenderer(SDL_Window *);
   ~SDLRenderer() final;

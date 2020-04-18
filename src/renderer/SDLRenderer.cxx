@@ -17,7 +17,7 @@ SDLRenderer::SDLRenderer(SDL_Window * sdl_window)
   font += "resources/fonts/arcadeclassics.ttf";
   m_Font = TTF_OpenFont(font.c_str(), 24);
   if(!m_Font)
-    throw CytopiaError{TRACE_INFO "Failed to open font Sans.ttf: " 
+    throw CytopiaError{TRACE_INFO "Failed to open font: " 
       + string{TTF_GetError()}};
 
   if(SDL_RenderClear(m_Renderer) != 0)
@@ -68,7 +68,6 @@ void SDLRenderer::drawText(
   }
   SDL_RenderCopy(m_Renderer, texture, nullptr, &rect);
   SDL_FreeSurface(surface);
-  m_Textures.push_back(texture);
 }
 
 void SDLRenderer::drawPicture(const Rectangle & rect, uint32_t * data)
@@ -83,11 +82,24 @@ void SDLRenderer::drawPicture(const Rectangle & rect, uint32_t * data)
       0x0000ff00,
       0x000000ff
       );
+  if(surface == nullptr) 
+  {
+    LOG(LOG_ERROR) << TRACE_INFO "Failed to create an SDL_Surface: " << SDL_GetError();
+    return;
+  }
   SDL_Texture* texture = SDL_CreateTextureFromSurface(m_Renderer, surface);
+  if(texture == nullptr)
+  {
+    LOG(LOG_ERROR) << TRACE_INFO "Failed to create an SDL_Texture: " << SDL_GetError();
+    return;
+  }
   SDL_Rect position = rect.to_SDL();
-  SDL_RenderCopy(m_Renderer, texture, nullptr, &position);
+  if(SDL_RenderCopy(m_Renderer, texture, nullptr, &position) != 0)
+  {
+    LOG(LOG_ERROR) << TRACE_INFO "Failed to render:" << SDL_GetError();
+    return;
+  } 
   SDL_FreeSurface(surface);
-  m_Textures.push_back(texture);
 }
 
 void SDLRenderer::drawShape(const Rectangle & r, RGBAColor c)

@@ -15,7 +15,9 @@ class ImageView : public iViewElement
 public:
   ImageView(std::string &&, DisplayMode);
   virtual ~ImageView();
-  virtual void draw(iRendererPtr &) const noexcept override;
+  void draw(iRenderer &) const noexcept override;
+  void setup() noexcept final;
+  void bindHandlers(class GameService & context) noexcept final;
 };
 
 using ImageViewPtr = std::shared_ptr<ImageView>;

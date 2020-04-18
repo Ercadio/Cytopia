@@ -29,10 +29,10 @@ struct BoxSizing
 
 struct PositionHint
 {
-  Measurement top;
-  Measurement right;
-  Measurement bottom;
   Measurement left;
+  Measurement right;
+  Measurement top;
+  Measurement bottom;
 };
 
 class MarginConfiguration : public PositionHint { };
@@ -51,8 +51,8 @@ constexpr Measurement operator-(const Measurement &, const Measurement &);
 
 struct AbsolutePosition
 {
-  Measurement top;
   Measurement left;
+  Measurement top;
   static constexpr AbsolutePosition Origin() { return {0_px, 0_px}; }
   static constexpr AbsolutePosition Center() { return {50_lw - 50_ew, 50_lh - 50_eh}; }
 };

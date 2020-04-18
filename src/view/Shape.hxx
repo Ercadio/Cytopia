@@ -30,6 +30,7 @@ public:
   std::pair<int, int> p2() const noexcept;
   void translateX(int x);
   void translateY(int y);
+  void intersect(const Rectangle &);
   friend std::ostream& operator<<(std::ostream&, const Rectangle&);
   static Rectangle RescaleCenter(const Rectangle &, uint32_t zoom);
 };

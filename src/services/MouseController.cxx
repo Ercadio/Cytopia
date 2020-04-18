@@ -64,3 +64,4 @@ void MouseController::handleEvent(ActivitySwitchEvent && )
   m_SpatialMap.clear();
   m_LastHovered = nullptr;
 }
+

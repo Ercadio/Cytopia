@@ -12,9 +12,11 @@ class IconButton : public iViewElement, public ButtonObserver
   char m_At;
 public:
   IconButton(const std::string &, const RGBAColor& = Palette::Gray);
-  virtual void draw(iRendererPtr &) const noexcept override;
+  virtual void draw(iRenderer &) const noexcept override;
   virtual ~IconButton();
   void update(Notification) noexcept final;
+  void setup() noexcept final;
+  void bindHandlers(class GameService & context) noexcept final;
 };
 
 using IconButtonPtr = std::shared_ptr<IconButton>;

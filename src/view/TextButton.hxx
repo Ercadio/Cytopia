@@ -12,11 +12,13 @@ class TextButton : public iViewElement, public ButtonObserver
   const char * m_Text;
 public:
   TextButton(const char *, RGBAColor = Palette::Gray);
-  virtual void draw(iRendererPtr &) const noexcept override;
+  virtual void draw(iRenderer &) const noexcept override;
   virtual ~TextButton();
   using MyController = class ButtonHandler;
   using MyState = ButtonState;
   void update(Notification) noexcept final;
+  void setup() noexcept final;
+  void bindHandlers(class GameService & context) noexcept final;
 };
 
 using TextButtonPtr = std::shared_ptr<TextButton>;

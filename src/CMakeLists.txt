@@ -30,8 +30,10 @@ set(SOURCE_FILES
   events/MouseEvents.hxx
   events/UIEvents.hxx
   main.cxx
-  model/iState.hxx
-  model/iState.cxx
+  model/iModel.hxx
+  model/iModel.cxx
+  model/ScrollingModel.hxx
+  model/ScrollingModel.cxx
   model/ButtonState.hxx
   model/ButtonState.cxx
   model/Map.cxx
@@ -39,10 +41,11 @@ set(SOURCE_FILES
   model/Map.inl.hxx
   model/MapEditor.cxx
   model/MapEditor.hxx
-  model/MousePosition.cxx
-  model/MousePosition.hxx
+  model/MouseState.cxx
+  model/MouseState.hxx
   model/Settings.hxx
   model/Settings.cxx
+  model/DataModel.hxx
   services/GameClock.cxx
   services/GameClock.hxx
   services/GameClock.inl.hxx
@@ -69,8 +72,12 @@ set(SOURCE_FILES
   util/Singleton.hxx
   util/filesystem.hxx
   util/filesystem.cxx
-  view/AbsoluteLayout.hxx
-  view/AbsoluteLayout.cxx
+  layout/iLayout.hxx
+  layout/iLayout.cxx
+  layout/AbsoluteLayout.hxx
+  layout/AbsoluteLayout.cxx
+  layout/SelectionLayout.hxx
+  layout/SelectionLayout.cxx
   view/AssetHelper.hxx
   view/AssetHelper.cxx
   view/BoxSizing.hxx
@@ -80,6 +87,10 @@ set(SOURCE_FILES
   view/Color.cxx
   view/TextButton.cxx
   view/TextButton.hxx
+  view/TextView.hxx
+  view/TextView.cxx
+  view/CursorView.hxx
+  view/CursorView.cxx
   activity/MainMenuActivity.cxx
   activity/MainMenuActivity.hxx
   activity/NewGameActivity.cxx
@@ -90,28 +101,26 @@ set(SOURCE_FILES
   activity/LanguageSelectionActivity.hxx
   activity/PluginSelectionActivity.cxx
   activity/PluginSelectionActivity.hxx
+  activity/iActivity.cxx
+  activity/iActivity.hxx
   view/IconButton.hxx
   view/IconButton.cxx
   view/ImageView.hxx
   view/ImageView.cxx
-  view/iRenderer.hxx
-  view/iRenderer.cxx
   view/Shape.hxx
   view/Shape.cxx
   view/Window.cxx
   view/Window.hxx
-  view/iActivity.cxx
-  view/iActivity.hxx
-  view/iLayout.hxx
-  view/iLayout.cxx
   view/iView.hxx
   view/iView.cxx
   view/iViewElement.hxx
   view/iViewElement.cxx
-  view/SDLRenderer.hxx
-  view/SDLRenderer.cxx
-  model/iModel.hxx
-  model/iModel.cxx
+  renderer/iRenderer.hxx
+  renderer/iRenderer.cxx
+  renderer/SDLRenderer.hxx
+  renderer/SDLRenderer.cxx
+  renderer/Canvas.cxx
+  renderer/Canvas.hxx
   )
 
 list(APPEND _include_directories

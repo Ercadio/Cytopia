@@ -14,7 +14,7 @@ IconButton::IconButton(const std::string & icon, const RGBAColor& color) :
 
 IconButton::~IconButton() { }
 
-void IconButton::draw(iRendererPtr & renderer) const noexcept
+void IconButton::draw(iRenderer & renderer) const noexcept
 {
   LOG(LOG_DEBUG) << "Drawing a button widget";
   
@@ -56,7 +56,7 @@ void IconButton::draw(iRendererPtr & renderer) const noexcept
       Rectangle{0, 0, mind / 8, mind / 4});
   
   /* Finally, we draw the picture & icon*/
-  renderer->drawPicture(rect, pixels.data());
+  renderer.drawPicture(rect, pixels.data());
   
   rect = Rectangle::RescaleCenter(getBounds(), (7<<16)/10);
   rect.translateY(-2);
@@ -73,7 +73,7 @@ void IconButton::draw(iRendererPtr & renderer) const noexcept
       pixels.data(), 
       Rectangle{0, 0, swidth - 1, sheight - 1},
       rect);
-  renderer->drawPicture(rect, pixels.data());
+  renderer.drawPicture(rect, pixels.data());
 }
 
 void IconButton::update(Notification notif) noexcept
@@ -99,3 +99,6 @@ void IconButton::update(Notification notif) noexcept
       break;
   }
 }
+
+void IconButton::setup() noexcept { }
+void IconButton::bindHandlers(class GameService & context) noexcept { };

@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include "../view/AbsoluteLayout.hxx"
-#include "../view/iActivity.hxx"
+#include "../layout/AbsoluteLayout.hxx"
+#include "iActivity.hxx"
 #include "../util/LOG.hxx"
 
 class MainMenuActivity : public AbsoluteLayout, public iActivity
@@ -18,6 +18,7 @@ public:
   MainMenuActivity(GameService::ServiceTuple &, class Window &);
   virtual ~MainMenuActivity() final;
   void setup() noexcept final;
+  void bindHandlers(class GameService & context) noexcept final;
 };
 
 #endif // MAIN_MENU_ACTIVITY_HXX

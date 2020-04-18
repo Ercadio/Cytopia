@@ -22,7 +22,7 @@ private:
   void handleEvent(ClickEvent && );  
   void handleEvent(ScrollEvent && );
   void handleEvent(ActivitySwitchEvent && );
- 
+  
   friend class Game; 
 
   GlobalModel & m_GlobalModel;
@@ -30,7 +30,7 @@ private:
   using HandlerList = std::vector<iMouseHandler *>;
   std::unordered_map<SpatialBlock, HandlerList> m_SpatialMap;
   iMouseHandler * m_LastHovered;
-};
 
+};
 
 #endif // MOUSE_CONTROLLER_HXX

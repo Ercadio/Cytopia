@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include "../view/AbsoluteLayout.hxx"
-#include "../view/iActivity.hxx"
+#include "../layout/AbsoluteLayout.hxx"
+#include "../activity/iActivity.hxx"
 #include "../util/LOG.hxx"
 
 class PluginSelectionActivity : public AbsoluteLayout, public iActivity
@@ -14,6 +14,7 @@ public:
   PluginSelectionActivity(GameService::ServiceTuple &, class Window &);
   virtual ~PluginSelectionActivity() final;
   void setup() noexcept final;
+  void bindHandlers(class GameService & context) noexcept final;
 };
 
 #endif // PLUGIN_SELECTION_ACTIVITY_HXX

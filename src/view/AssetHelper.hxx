@@ -12,8 +12,9 @@
 namespace AssetHelper
 {
   void MakeColRepeatImage(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
-  
-  
+
+  void GetPixelsFromSurface(SDL_Surface *, uint32_t*);
+
   /**
    * @brief     Expands a sprite to fit a region
    * @details   Repeats the middle row of pixels in both dimensions
@@ -45,9 +46,13 @@ namespace AssetHelper
   void ColorMagicPixels(Iterator begin, Iterator end, const RGBAColor& color);
   
   void ResizeNearest(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
+
+  void Render(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
+
   void RepeatXY(uint32_t*, uint32_t*, const Rectangle &, const Rectangle &);
+  
   template <typename OutputIterator>
-  static std::pair<int, int> LoadImagePixels(const std::string &, OutputIterator);
+  static std::pair<int, int> LoadImagePixels(const std::string &, OutputIterator&&);
 };
 
 #include "AssetHelper.inl.hxx"

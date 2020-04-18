@@ -1,12 +1,13 @@
 #include "Window.hxx"
-#include "SDLRenderer.hxx"
+#include "../renderer/SDLRenderer.hxx"
 #include "../util/LOG.hxx"
 #include "../util/filesystem.hxx"
 #include <SDL_image.h>
 
 using namespace std::chrono_literals;
 
-Window::Window(const char * title, unsigned int width, unsigned int height, bool isFullScreen, const string & windowIcon)
+Window::Window(const char * title, unsigned int width, unsigned int height, bool isFullScreen, const string & windowIcon, GlobalModel & globalModel) :
+  m_GlobalModel(globalModel)
 {
   m_Window = SDL_CreateWindow(title, 
       SDL_WINDOWPOS_CENTERED, 
@@ -26,6 +27,7 @@ Window::Window(const char * title, unsigned int width, unsigned int height, bool
 
   SDL_SetWindowIcon(m_Window, icon);
   SDL_FreeSurface(icon);
+  std::get<MouseState>(m_GlobalModel).addObserver(m_Cursor);
 }
 
 Window::~Window()
@@ -37,14 +39,20 @@ Window::~Window()
   SDL_DestroyWindow(m_Window);
 }
 
+GlobalModel & Window::getGlobalModel()
+{
+  return m_GlobalModel;
+}
+
 void Window::setActivity(iActivityPtr activity)
 {
   m_Renderer->clear();
   std::swap(m_Activity, activity);
   LOG(LOG_DEBUG) << "Setting up new activity";
   m_Activity->setup();
+  m_Activity->bindHandlers(*m_Activity);
   LOG(LOG_DEBUG) << "Drawing new activity";
-  m_Activity->draw(m_Renderer);
+  m_Activity->draw(*m_Renderer);
   m_Renderer->commit();
 }
 
@@ -58,13 +66,14 @@ void Window::handleEvent(WindowResizeEvent &&event)
   m_Renderer->clear();
   m_Activity->setBounds(getBounds());
   m_Activity->setup();
-  m_Activity->draw(m_Renderer);
+  m_Activity->bindHandlers(*m_Activity);
+  m_Activity->draw(*m_Renderer);
   m_Renderer->commit();
 }
 
 void Window::handleEvent(WindowRedrawEvent &&event)
 {
   m_Renderer->clear();
-  m_Activity->draw(m_Renderer);
+  m_Activity->draw(*m_Renderer);
   m_Renderer->commit();
 }

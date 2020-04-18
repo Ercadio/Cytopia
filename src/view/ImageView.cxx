@@ -10,7 +10,7 @@ ImageView::ImageView(std::string && image, DisplayMode mode) :
 
 ImageView::~ImageView() { }
 
-void ImageView::draw(iRendererPtr & renderer) const noexcept
+void ImageView::draw(iRenderer & renderer) const noexcept
 {
   auto rect = getBounds();
   std::vector<uint32_t> sprite;
@@ -33,5 +33,8 @@ void ImageView::draw(iRendererPtr & renderer) const noexcept
           rect);
       break;
   }
-  renderer->drawPicture(rect, pixels.data());
+  renderer.drawPicture(rect, pixels.data());
 }
+
+void ImageView::setup() noexcept { }
+void ImageView::bindHandlers(class GameService & context) noexcept { };

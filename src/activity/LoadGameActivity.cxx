@@ -36,7 +36,7 @@ LoadGameActivity::LoadGameActivity(GameService::ServiceTuple & context, Window &
           button, 
           BoxSizing{30_lw, 10_lh}, 
           AbsolutePosition{tp, 35_lw});
-      createController<ButtonHandler>(cb, state, *button);
+      createController<ButtonHandler>(getWindow().getGlobalModel(), cb, state, *button);
       state.addObserver(button);
     }
   }
@@ -47,6 +47,10 @@ LoadGameActivity::~LoadGameActivity() = default;
 
 void LoadGameActivity::setup() noexcept
 {
-  computeBoundaries();
-  bindHandlers();
+  iLayout::setup();
+}
+
+void LoadGameActivity::bindHandlers(class GameService & context) noexcept
+{
+  iLayout::bindHandlers(context);
 }

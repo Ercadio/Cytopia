@@ -4,8 +4,8 @@
 #include <memory>
 #include <betterEnums.hxx>
 
-#include "iLayout.hxx"
-#include "iViewElement.hxx"
+#include "../layout/iLayout.hxx"
+#include "../view/iViewElement.hxx"
 #include "../GameService.hxx"
 #include "../controller/iController.hxx"
 #include "../model/iModel.hxx"
@@ -22,7 +22,6 @@ using ActivityImplementations = TypeList<
 class iActivity : public GameService, public virtual iView
 {
   class Window & m_Window;
-  std::vector<iControllerPtr> m_Controllers;
   std::vector<iModelPtr> m_States;
   friend class Window;
 
@@ -30,7 +29,7 @@ public:
  
   iActivity(GameService::ServiceTuple &, class Window &);
   virtual ~iActivity() = 0;
-  virtual void setup() noexcept = 0;
+
 protected:
 
   /**
@@ -38,14 +37,20 @@ protected:
    * @param ActivityType the type of iActivity to switch to
    */
   void activitySwitch(ActivityType);
-  
-  template <typename ControllerType, typename... Args>
-  ControllerType & createController(Args &&... args);
-  
+
+  /**
+   * @brief Creates a new State
+   * @tparam StateType the type of the state
+   * @tparam Args arguments to construct the state
+   * @returns a referenece to the created state
+   */  
   template <typename StateType, typename... Args>
   StateType & createState(Args &&... args);
 
-  void bindHandlers() noexcept;
+  /**
+   * @returns the Window this Activity is assigned to 
+   */
+  Window & getWindow() noexcept;
 };
 
 using iActivityPtr = std::unique_ptr<iActivity>;

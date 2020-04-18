@@ -41,17 +41,17 @@ public:
    * @tparam ServiceType the type to verify
    */
   template <typename ServiceType> struct require_service_type;
-
-private:
-  TupleType<Types>::type &m_Services;
-
-protected:
+  
   /**
    * @brief returns the required service
    * @tparam ServiceType the type of the service
    */
   template <typename ServiceType> ServiceType &GetService();
   ServiceTuple & getGameContext();
+
+private:
+  TupleType<Types>::type &m_Services;
+
 };
 
 #include "GameService.inl.hxx"

@@ -1,5 +1,21 @@
 #include "AssetHelper.hxx"
 #include "../util/LOG.hxx"
+  
+void AssetHelper::GetPixelsFromSurface(SDL_Surface * surface, uint32_t* data)
+{
+  SDL_LockSurface(surface);
+  auto format = surface->format;
+  uint32_t* pixels = static_cast<uint32_t*>(surface->pixels);
+  for(std::size_t i = 0; i < surface->w * surface->h; ++i)
+  {
+    *data++ = 
+      (pixels[i] & format->Rmask) >> format->Rshift << 24 |
+      (pixels[i] & format->Gmask) >> format->Gshift << 16 |
+      (pixels[i] & format->Bmask) >> format->Bshift << 8  |
+      (pixels[i] & format->Amask) >> format->Ashift << 0;
+  }
+  SDL_UnlockSurface(surface);
+}
 
 void AssetHelper::MakeColRepeatImage(uint32_t* orig, uint32_t* dest, const Rectangle & orig_rect, const Rectangle & dest_rect)
 {
@@ -136,3 +152,22 @@ size_t AssetHelper::CropImage(uint32_t* from, uint32_t* to, const Rectangle & rf
   return (tp2x - tp1x + 1) * (tp2y - tp1y + 1);
 }
 
+void AssetHelper::Render(uint32_t* from, uint32_t* to, const Rectangle & rfrom, const Rectangle & rto)
+{
+  auto [fp1x, fp1y] = rfrom.p1();
+  auto [fp2x, fp2y] = rfrom.p2();
+  auto [tp1x, tp1y] = rto.p1();
+  auto [tp2x, tp2y] = rto.p2();
+  tp1x = std::clamp(tp1x, fp1x, fp2x);
+  tp1y = std::clamp(tp1y, fp1y, fp2y);
+  tp2x = std::clamp(tp2x, fp1x, fp2x);
+  tp2y = std::clamp(tp2y, fp1y, fp2y);
+  auto w = rto.width();
+  for(size_t y = fp1y; y <= fp2y; ++y)
+  {
+    for(size_t x = fp1x; x <= fp2x; ++x)
+    {
+      to[x + y * w] = *from++;
+    }
+  }
+}

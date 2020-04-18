@@ -50,6 +50,16 @@ void Rectangle::translateY(int y)
   m_y2 += y;
 }
 
+void Rectangle::intersect(const Rectangle & other)
+{
+  auto [op1x, op1y] = other.p1();
+  auto [op2x, op2y] = other.p2();
+  m_x1 = std::clamp(m_x1, op1x, op2x);
+  m_y1 = std::clamp(m_y1, op1y, op2y);
+  m_x2 = std::clamp(m_x2, op1x, op2x);
+  m_y2 = std::clamp(m_y2, op1y, op2y);
+}
+
 Rectangle Rectangle::RescaleCenter(const Rectangle & rect, uint32_t zoom)
 {
   auto [p1x, p1y] = rect.p1();

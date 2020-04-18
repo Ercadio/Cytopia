@@ -36,7 +36,7 @@ PluginSelectionActivity::PluginSelectionActivity(GameService::ServiceTuple & con
           button, 
           BoxSizing{30_lw, 10_lh}, 
           AbsolutePosition{tp, 35_lw});
-      createController<ButtonHandler>(cb, state, *button);
+      createController<ButtonHandler>(getWindow().getGlobalModel(), cb, state, *button);
       state.addObserver(button);
     }
   }
@@ -47,6 +47,10 @@ PluginSelectionActivity::~PluginSelectionActivity() = default;
 
 void PluginSelectionActivity::setup() noexcept
 {
-  computeBoundaries();
-  bindHandlers();
+  iLayout::setup();
+}
+
+void PluginSelectionActivity::bindHandlers(class GameService & context) noexcept
+{
+  iLayout::bindHandlers(context);
 }

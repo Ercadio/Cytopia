@@ -7,8 +7,6 @@
 #include "../util/Point.hxx"
 #include "iController.hxx"
 
-BETTER_ENUM(CursorType, uint8_t, Arrow, Hand)
-
 class iMouseHandler : public iController
 {
 public:
@@ -18,8 +16,6 @@ public:
   virtual void onMouseLeave();
   virtual void onScroll(class ScrollEvent &&);
   virtual const class iShape & getShape() = 0;
-protected:
-  void setCursor(CursorType);
 };
 
 using iMouseHandlerPtr = std::unique_ptr<iMouseHandler>;

@@ -3,7 +3,7 @@
 
 #include <functional>
 
-#include "../view/iActivity.hxx"
+#include "../activity/iActivity.hxx"
 #include "../util/Observer.hxx"
 
 /**

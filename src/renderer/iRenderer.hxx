@@ -4,8 +4,8 @@
 #include <tuple>
 #include <betterEnums.hxx>
 
-#include "Color.hxx"
-#include "Shape.hxx"
+#include "../view/Color.hxx"
+#include "../view/Shape.hxx"
 #include "../util/Meta.hxx"
 
 BETTER_ENUM(PositionType, uint8_t, Centered, Normal);

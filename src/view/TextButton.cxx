@@ -14,7 +14,7 @@ TextButton::TextButton(const char * text, RGBAColor color) :
 
 TextButton::~TextButton() { }
 
-void TextButton::draw(iRendererPtr & renderer) const noexcept
+void TextButton::draw(iRenderer & renderer) const noexcept
 {
   LOG(LOG_DEBUG) << "Drawing a button widget";
   std::string fimage = getBasePath();
@@ -57,12 +57,12 @@ void TextButton::draw(iRendererPtr & renderer) const noexcept
       Rectangle{0, 0, mind / 8, mind / 4});
   
   /* Finally, we draw the picture & text */
-  renderer->drawPicture(rect, pixels.data());
+  renderer.drawPicture(rect, pixels.data());
   if(m_At == 2)
   {
     rect.translateY(5);
   }
-  renderer->drawText(m_Text, RGBAColor{0xFFFFFFFF}, rect, PositionType::Centered);
+  renderer.drawText(m_Text, RGBAColor{0xFFFFFFFF}, rect, PositionType::Centered);
 }
 
 void TextButton::update(Notification notif) noexcept
@@ -88,3 +88,7 @@ void TextButton::update(Notification notif) noexcept
       break;
   }
 }
+
+void TextButton::setup() noexcept { };
+
+void TextButton::bindHandlers(class GameService & context) noexcept { };

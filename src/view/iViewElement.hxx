@@ -13,7 +13,7 @@ public:
   virtual const Rectangle & getBounds() const noexcept final;
   friend class AbsoluteLayout;
 private:
-  void setBounds(Rectangle &&) noexcept final;
+  void setBounds(Rectangle &&) noexcept override;
 };
 
 using iViewElementPtr = std::shared_ptr<iViewElement>;

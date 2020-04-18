@@ -26,7 +26,7 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
     ImageViewPtr logo = std::make_shared<ImageView>("/resources/images/app_icons/logo_big_textured", DisplayMode::NearestXY);
     addElement(logo,
         BoxSizing{220_px, 50_px},
-        AbsolutePosition{25_lh - 50_px, 50_lw - 50_ew});
+        AbsolutePosition{50_lw - 50_ew, 25_lh - 50_px});
   }
   /* Create all text buttons */
   {
@@ -44,8 +44,8 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
       addElement(
           button, 
           BoxSizing{30_lw, 10_lh}, 
-          AbsolutePosition{tp, 35_lw});
-      createController<ButtonHandler>(cb, state, *button);
+          AbsolutePosition{35_lw, tp});
+      createController<ButtonHandler>(getWindow().getGlobalModel(), cb, state, *button);
       state.addObserver(button);
     }
   }
@@ -66,8 +66,8 @@ MainMenuActivity::MainMenuActivity(GameService::ServiceTuple & context, Window &
       addElement(
           button, 
           BoxSizing{50_px, 50_px}, 
-          AbsolutePosition{100_lh - 55_px, lp});
-      createController<ButtonHandler>(cb, state, *button);
+          AbsolutePosition{lp, 100_lh - 55_px});
+      createController<ButtonHandler>(getWindow().getGlobalModel(), cb, state, *button);
       state.addObserver(button);
     }
   }
@@ -82,6 +82,10 @@ MainMenuActivity::~MainMenuActivity() = default;
 
 void MainMenuActivity::setup() noexcept
 {
-  computeBoundaries();
-  bindHandlers();
+  iLayout::setup();
+}
+
+void MainMenuActivity::bindHandlers(class GameService & context) noexcept
+{
+  iLayout::bindHandlers(context);
 }

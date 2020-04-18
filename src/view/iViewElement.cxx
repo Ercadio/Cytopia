@@ -13,5 +13,3 @@ void iViewElement::setBounds(Rectangle && r) noexcept
 {
   std::swap(r, m_Bounds);
 }
-
-
